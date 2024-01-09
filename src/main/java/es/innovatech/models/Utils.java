@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.innovatech.DAO.CategoriaDAO;
-import es.innovatech.DAO.DAOFactory;
+import es.innovatech.DAOFactory.DAOFactory;
 import es.innovatech.DAO.ICategoriasDAO;
 import es.innovatech.beans.Carrito;
 import es.innovatech.beans.Articulo;

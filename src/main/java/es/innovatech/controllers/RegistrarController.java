@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-import es.innovatech.DAO.DAOFactory;
+import es.innovatech.DAOFactory.DAOFactory;
 import es.innovatech.DAO.ILineasPedidosDAO;
 import es.innovatech.DAO.IPedidosDAO;
 import es.innovatech.DAO.IUsuariosDAO;

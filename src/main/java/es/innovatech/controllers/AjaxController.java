@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 
-import es.innovatech.DAO.DAOFactory;
+import es.innovatech.DAOFactory.DAOFactory;
 import es.innovatech.DAO.IArticulosDAO;
 import es.innovatech.DAO.ICategoriasDAO;
 import es.innovatech.DAO.IUsuariosDAO;

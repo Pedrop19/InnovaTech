@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import es.innovatech.beans.Usuario;
 import es.innovatech.models.Utils;
-import es.innovatech.DAO.DAOFactory;
+import es.innovatech.DAOFactory.DAOFactory;
 import es.innovatech.DAO.IArticulosDAO;
 import es.innovatech.beans.Articulo;
 import es.innovatech.beans.Carrito;

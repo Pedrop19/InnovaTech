@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
-import es.innovatech.DAO.DAOFactory;
+import es.innovatech.DAOFactory.DAOFactory;
 import es.innovatech.DAO.IUsuariosDAO;
 import es.innovatech.DAO.UsuarioDAO;
 import es.innovatech.beans.Usuario;

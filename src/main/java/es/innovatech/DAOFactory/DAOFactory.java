@@ -2,7 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package es.innovatech.DAO;
+package es.innovatech.DAOFactory;
+
+import es.innovatech.DAO.IArticulosDAO;
+import es.innovatech.DAO.ICategoriasDAO;
+import es.innovatech.DAO.ILineasPedidosDAO;
+import es.innovatech.DAO.IPedidosDAO;
+import es.innovatech.DAO.IUsuariosDAO;
 
 /**
  *

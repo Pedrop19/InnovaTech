@@ -10,7 +10,7 @@ import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionListener;
 import javax.servlet.http.HttpSessionAttributeListener;
 
-import es.innovatech.DAO.DAOFactory;
+import es.innovatech.DAOFactory.DAOFactory;
 import es.innovatech.DAO.IArticulosDAO;
 import es.innovatech.DAO.ICategoriasDAO;
 import es.innovatech.beans.Categoria;

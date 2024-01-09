@@ -65,7 +65,7 @@ public class FrontController extends HttpServlet {
         String error = "";
         Date fecha = null;
         Utils utils = new Utils();
-        DAOFactory daof = DAOFactory.getDAOFactory(DAOFactory.MYSQL);
+        DAOFactory daof = DAOFactory.getDAOFactory();
 
         switch (button) {
             case "registrar":

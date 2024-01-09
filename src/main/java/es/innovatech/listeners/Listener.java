@@ -29,29 +29,12 @@ public class Listener implements ServletContextListener, HttpSessionListener, Ht
     @Override
     public void contextInitialized(ServletContextEvent sce) {
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.MYSQL);
+        DAOFactory daoFactory = DAOFactory.getDAOFactory();
         ICategoriasDAO categoriasDAO = daoFactory.getICategoriasDAO();
         List<Categoria> categorias = categoriasDAO.getCategorias();
         sce.getServletContext().setAttribute("categorias", categorias);
 
-        IArticulosDAO articulosDAO = daoFactory.getIArticulosDAO();
-        List<Articulo> articulos = articulosDAO.getArticulos();
 
-        List<Articulo> articulos2 = new ArrayList<Articulo>();
-
-        HashSet<Integer> indicesAleatorios = new HashSet<Integer>();
-
-        while (indicesAleatorios.size() < 6) {
-            int indiceAleatorio = (int) (Math.random() * articulos.size());
-            indicesAleatorios.add(indiceAleatorio);
-        }
-
-        for (int indice : indicesAleatorios) {
-            Articulo articulo = articulos.get(indice);
-            articulos2.add(articulo);
-        }
-
-        sce.getServletContext().setAttribute("articulos", articulos2);
 
     }
 }

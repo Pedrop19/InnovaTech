@@ -64,7 +64,7 @@ public class Utils {
     public List<Carrito> cookieCarritoaList(String cookieCarrito) {
         List<Carrito> carrito = new ArrayList<Carrito>();
         String[] productos = cookieCarrito.split(";");
-        DAOFactory daof = DAOFactory.getDAOFactory(DAOFactory.MYSQL);
+        DAOFactory daof = DAOFactory.getDAOFactory();
         ICategoriasDAO categoriaDAO = daof.getICategoriasDAO();
         categoriaDAO = new CategoriaDAO();
         for (int i = 0; i < productos.length; i++) {

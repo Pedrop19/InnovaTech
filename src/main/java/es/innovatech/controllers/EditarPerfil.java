@@ -63,7 +63,7 @@ public class EditarPerfil extends HttpServlet {
         String error = "";
         StringBuilder nombreFichero = new StringBuilder();
         String filePath = null;
-        DAOFactory daof = DAOFactory.getDAOFactory(DAOFactory.MYSQL);
+        DAOFactory daof = DAOFactory.getDAOFactory();
 
         switch (button) {
             case "borrarCuenta":

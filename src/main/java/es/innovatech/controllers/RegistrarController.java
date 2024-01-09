@@ -72,7 +72,7 @@ public class RegistrarController extends HttpServlet {
         StringBuilder nombreFichero = new StringBuilder();
         String filePath = null;
         Utils utils = new Utils();
-        DAOFactory daof = DAOFactory.getDAOFactory(DAOFactory.MYSQL);
+        DAOFactory daof = DAOFactory.getDAOFactory();
 
         switch (button) {
             case "registrar":

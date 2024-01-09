@@ -24,15 +24,8 @@ public abstract class DAOFactory {
     public abstract ICategoriasDAO getICategoriasDAO();
 
     
-    public static DAOFactory getDAOFactory(int tipo){
-        DAOFactory daof = null;
-        
-        switch(tipo){
-            case MYSQL:
-                daof = new MySQLDAOFactory();
-                break;
-        }
-        
+    public static DAOFactory getDAOFactory(){
+        DAOFactory daof = new MySQLDAOFactory();
         return daof;
     }
     

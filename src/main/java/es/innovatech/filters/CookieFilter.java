@@ -20,14 +20,18 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import es.innovatech.DAO.IArticulosDAO;
+import es.innovatech.DAOFactory.DAOFactory;
+import es.innovatech.beans.Articulo;
 import es.innovatech.beans.Carrito;
 import es.innovatech.models.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
-@WebFilter("/*") 
+@WebFilter("/*")
 public class CookieFilter implements Filter {
 
     @Override
@@ -37,12 +41,35 @@ public class CookieFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+
         if (request instanceof HttpServletRequest) {
             HttpServletRequest httpRequest = (HttpServletRequest) request;
-
-
+            HttpSession session = httpRequest.getSession();
+            List<Articulo> articulos = (List<Articulo>) session.getAttribute("articulos");
             Cookie[] cookies = httpRequest.getCookies();
             Cookie carritoCookie = null;
+
+            if (articulos == null) {
+                DAOFactory daoFactory = DAOFactory.getDAOFactory();
+                IArticulosDAO articulosDAO = daoFactory.getIArticulosDAO();
+                articulos = articulosDAO.getArticulos();
+
+                List<Articulo> articulos2 = new ArrayList<Articulo>();
+
+                HashSet<Integer> indicesAleatorios = new HashSet<Integer>();
+
+                while (indicesAleatorios.size() < 6) {
+                    int indiceAleatorio = (int) (Math.random() * articulos.size());
+                    indicesAleatorios.add(indiceAleatorio);
+                }
+
+                for (int indice : indicesAleatorios) {
+                    Articulo articulo = articulos.get(indice);
+                    articulos2.add(articulo);
+                }
+
+                session.setAttribute("articulos", articulos2);
+            }
 
             if (cookies != null) {
                 for (Cookie cookie : cookies) {
@@ -58,7 +85,6 @@ public class CookieFilter implements Filter {
                 Utils utils = new Utils();
                 String cookieDecodificada = utils.decodificarCookie(carritoCookie.getValue());
                 carrito = utils.cookieCarritoaList(cookieDecodificada);
-                HttpSession session = httpRequest.getSession();
                 session.setAttribute("carrito", carrito);
             }
             chain.doFilter(request, response);
@@ -72,4 +98,3 @@ public class CookieFilter implements Filter {
     public void destroy() {
     }
 }
-

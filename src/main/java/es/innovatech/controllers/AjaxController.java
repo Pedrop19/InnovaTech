@@ -78,7 +78,7 @@ public class AjaxController extends HttpServlet {
         int cantidad = 0;
         String cantidadString = "";
         PrintWriter out = response.getWriter();
-        DAOFactory daof = DAOFactory.getDAOFactory(DAOFactory.MYSQL);
+        DAOFactory daof = DAOFactory.getDAOFactory();
         
 
         switch (accion) {
@@ -192,7 +192,7 @@ public class AjaxController extends HttpServlet {
     }
 
     private boolean verificarExistenciaEmail(String email) {
-        DAOFactory daof = DAOFactory.getDAOFactory(DAOFactory.MYSQL);
+        DAOFactory daof = DAOFactory.getDAOFactory();
         IUsuariosDAO usuarioDao = daof.getIUsuarioDAO();
         Usuario usuario = usuarioDao.getUsuariobyEmail(email);
         if (usuario != null) {

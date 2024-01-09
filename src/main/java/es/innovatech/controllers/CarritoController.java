@@ -61,7 +61,7 @@ public class CarritoController extends HttpServlet {
         List<Carrito> carritoList = (List<Carrito>) request.getSession().getAttribute("carrito");
         Utils utils = new Utils();
         Cookie[] cookies = request.getCookies();
-        DAOFactory daof = DAOFactory.getDAOFactory(DAOFactory.MYSQL);
+        DAOFactory daof = DAOFactory.getDAOFactory();
         String error = "";
 
         switch (button) {

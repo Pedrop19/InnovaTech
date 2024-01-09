@@ -1,0 +1,128 @@
+.modal{
+    --mdb-modal-width: 1000px !important;
+    color: #fff !important;
+}
+
+.lupa{
+    position: absolute;
+    right: 30px;
+    color: black !important;
+}
+
+.table-element th, td, tr{
+    background-color: #152140be !important;
+}
+
+.modal-carrito{
+    right: 0 !important;
+    transform-origin: top right;
+    transform: scale(0);
+    transition: transform 0.3s ease;
+    position: absolute;
+    top: 0;
+    width: 600px;
+    height: max-content;
+    background-color: #fff;
+    z-index: 1000;
+    padding: 1rem;
+    border-radius: 0 0 0 1rem;
+    margin: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    height: 100%;
+    animation: left 0.5s ease;
+    background: #d0daffa0; 
+    color:black;
+}
+
+.modal-carrito .modal-content{
+    background: #d0daffd1;
+}
+
+@keyframes left {
+    0%{
+        transform: translateX(100%);
+    }
+    100%{
+        transform: translateX(0%);
+    }
+}
+
+.navbar{
+    width: 90%;
+}
+
+.seccion-central{
+    background: url("../IMG/bg.svg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-clip: border-box;
+    background-attachment: fixed;
+    height: 100vh;
+}
+
+.input-box{
+    border-bottom: 1px solid #40ff00 !important;
+    background-color: #152140be !important;
+    color: #fff !important;
+}
+
+.input-box::placeholder{
+    color: #fff !important;
+}
+
+
+
+.cartas{
+    background: #d0daffa0;
+    color: black;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);    
+    transition: transform 0.3s ease;
+    
+}
+
+.cartas:hover{
+    transform: scale(1.05);
+}
+
+.cartas .card-title{
+    text-align: justify !important;
+}
+
+.seccion-factura{
+    padding: 1rem;
+   
+}
+
+.seccion-factura table{
+    width: 100%;
+}
+
+.btn-carrito{
+    border-radius: 0 0 10px 10px !important;
+}
+
+.card{
+    border-radius: 10px !important;
+    height: 450px !important;
+}
+
+.boton-registrar{
+    border: none !important;
+    background-color: transparent !important;
+    color: #4697dd !important;
+}
+
+.boton-registrar:hover{
+    text-decoration: underline !important;
+}
+
+.fixed-image-size {
+    height: 300px; 
+    object-fit: cover; 
+}
+
+.select{
+    flex: 0.3 !important;
+}

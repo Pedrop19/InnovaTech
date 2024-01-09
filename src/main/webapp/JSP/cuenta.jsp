@@ -14,7 +14,6 @@
   <link rel="stylesheet"  href="${css}">
   <link rel="icon" href="${icono}">
   <script src="${contexto}/JS/Busqueda.js" defer></script>
-  <script src="${contexto}/JS/Carrito.js" defer></script>
   <script src="${contexto}/JS/EditarPerfil.js" defer></script>
   <title>InnovaTech</title>
 </head>
@@ -22,8 +21,8 @@
 <body class="seccion-central">
 
 <jsp:directive.include file="/INC/navbar.jsp"/>
-  <section >
-    <div class="container my-5 ">
+  <section class="min-vh-100  w-100">
+    <%-- <div class="container my-5 ">
       <div class="row d-flex justify-content-center align-items-center h-100  ">
         <div class=" col-xl-9 ">
           <h1 class="text-white text-center mb-4">Editar Informac&oacute;n</h1>
@@ -257,11 +256,123 @@
             </form>
         </div>
       </div>
-    </div>
+    </div> --%>
+        <div class="container mt-3 w-75 vh-100 flex-column">
+            <h5 class="text-center text-white">Editar Perfil</h5>
+            <form action="${contexto}/EditarPerfil" method="post" class="w-100" enctype="multipart/form-data">
+                <div class="accordion shadow" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Secci&oacute;n 1: Informaci&oacute;n Personal
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="container">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
+                                        <div class="form-outline" data-mdb-input-init>
+                                            <input type="text" id="form12" class="form-control text-black" name="nombre" value="${usuario.nombre}"/>
+                                            <label class="form-label" for="form12">Nombre</label>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
+                                        <div class="form-outline" data-mdb-input-init>
+                                            <input type="text" id="form12" class="form-control text-black" name="nombre" value="${usuario.apellidos}"/>
+                                            <label class="form-label" for="form12">Apellidos</label>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i
+                                                class="fa-solid fa-cake-candles"></i></span>
+                                        <div class="form-outline" data-mdb-input-init>
+                                            <input type="text" id="form12" class="form-control " />
+                                            <label class="form-label" for="form12">Edad</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Secci&oacute;n 2: Detalles de Contacto
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="container">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i
+                                                class="fa-solid fa-envelope"></i></i></span>
+                                        <div class="form-outline" data-mdb-input-init>
+                                            <input type="email" id="form12" class="form-control " />
+                                            <label class="form-label" for="form12">Correo El&eacute;ctronico</label>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-phone"></i></span>
+                                        <div class="form-outline" data-mdb-input-init>
+                                            <input type="number" id="form12" class="form-control " />
+                                            <label class="form-label" for="form12">Tel&eacute;fono</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Secci&oacute;n 3: Preferencias
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="container">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i
+                                                class="fa-solid fa-droplet"></i></i></span>
+                                        <input type="color" id="form12" class="form-control" />
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-football"></i></span>
+                                        <div class="form-outline" data-mdb-input-init>
+                                            <input type="text" id="form12" class="form-control" />
+                                            <label class="form-label" for="form12">Hobbie Favorito</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-1">
+                    <button type="submit" name="button" value="aceptar" class="btn btn-primary mx-1">Aceptar</button>
+                    <button type="submit" name="button" value="cancelar" class="btn btn-danger">Cancelar</button>
+                </div>
+            </form>
+        </div>
   </section>
   <jsp:directive.include file="/INC/footer.jsp"/>
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

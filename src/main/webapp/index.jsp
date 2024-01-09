@@ -36,7 +36,7 @@
                                 <div class="bg-image hover-zoom ripple" data-mdb-ripple-color="light">
                                     <img src="IMG/productos/${producto.imagen}.jpg"
                                         class="fixed-image-size" />
-                                    <a id="a-link" href="#!">
+                                    <a id="" href="#!">
                                         <div class="mask">
                                             <div class="d-flex justify-content-start align-items-end h-100">
                                                 <h5><span class="badge bg-danger ms-2">M&aacute;s Vendido</span></h5>

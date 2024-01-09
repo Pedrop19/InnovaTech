@@ -87,26 +87,25 @@ public class FrontController extends HttpServlet {
                         HttpSession session = request.getSession();
                         List<Carrito> carritoList = new ArrayList<>();
                         List<LineaPedido> lineaPedidoList = new ArrayList<>();
-                        LineaPedido lineaPedido = new LineaPedido();
                         Pedido pedido = new Pedido();
-                        IPedidosDAO pedidosDAO = daof.getIPedidosDAO();
-                        ILineasPedidosDAO lineasPedidosDAO = daof.getILineasPedidoDAO();
-                        pedido = pedidosDAO.getPedidoPorEstado(usuario.getId(), Estado.C);
-                        if (pedido != null) {
-                            lineaPedidoList = lineasPedidosDAO.getLineasPedido(pedido.getIdPedido());
-                            for (LineaPedido linea : lineaPedidoList) {
-                                Carrito carrito = new Carrito();
-                                carrito.setArticulo(linea.getArticulo());
-                                carrito.setCantidad(linea.getCantidad());
-                                carritoList.add(carrito);
-                            }
-                            if (session.getAttribute("carrito") == null) {
-                                session.setAttribute("carrito", carritoList);
-                            } else {
-                                session.removeAttribute("carrito");
-                                session.setAttribute("carrito", carritoList);
-                            }
-                        }
+                        // IPedidosDAO pedidosDAO = daof.getIPedidosDAO();
+                        // ILineasPedidosDAO lineasPedidosDAO = daof.getILineasPedidoDAO();
+                        // pedido = pedidosDAO.getPedidoPorEstado(usuario.getId(), Estado.C);
+                        // if (pedido != null) {
+                        //     lineaPedidoList = lineasPedidosDAO.getLineasPedido(pedido.getIdPedido());
+                        //     for (LineaPedido linea : lineaPedidoList) {
+                        //         Carrito carrito = new Carrito();
+                        //         carrito.setArticulo(linea.getArticulo());
+                        //         carrito.setCantidad(linea.getCantidad());
+                        //         carritoList.add(carrito);
+                        //     }
+                        //     if (session.getAttribute("carrito") == null) {
+                        //         session.setAttribute("carrito", carritoList);
+                        //     } else {
+                        //         session.removeAttribute("carrito");
+                        //         session.setAttribute("carrito", carritoList);
+                        //     }
+                        // }
                         exito = "Bienvenido " + usuario.getNombre() + " " + usuario.getUltimoAcceso();
                         session.setAttribute("usuario", usuario);
                         request.setAttribute("exito", exito);

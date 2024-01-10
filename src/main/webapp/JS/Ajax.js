@@ -54,7 +54,7 @@ function validateEmail() {
     fetch('/InnovaTech/AjaxController', {
         method: 'POST',
         body: JSON.stringify({
-            action: "validateEmail",
+            accion: "validateEmail",
             email: emailElement.value
         })
     })

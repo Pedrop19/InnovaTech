@@ -18,7 +18,6 @@ import javax.servlet.http.Part;
 
 import es.innovatech.DAOFactory.DAOFactory;
 import es.innovatech.DAO.IUsuariosDAO;
-import es.innovatech.DAO.UsuarioDAO;
 import es.innovatech.beans.Usuario;
 import es.innovatech.models.Utils;
 

@@ -8,14 +8,14 @@ USE `innovatech`;
 
 /* INSERTAR UN USUARIO CON PERMISOS EN LA BBDD */
 CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
-GRANT ALL PRIVILEGES ON * . * TO 'admin'@'localhost';
+GRANT ALL PRIVILEGES ON innovatech.* TO 'admin'@'localhost';
 FLUSH PRIVILEGES;
 
 
 /* TABLA USUARIOS */
 DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE `innovatech`.`usuarios` (
-  `idusuario` SMALLINT NOT NULL,
+  `idusuario` SMALLINT NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(50) NOT NULL,
   `password` VARCHAR(100) NOT NULL,
   `nombre` VARCHAR(20) NOT NULL,
@@ -42,7 +42,7 @@ INSERT INTO `innovatech`.`usuarios` (`idusuario`, `email`, `password`, `nombre`,
 /* TABLA CATEGORIA */
 DROP TABLE IF EXISTS `categorias`;
 CREATE TABLE `innovatech`.`categorias` (
-  `idcategoria` TINYINT NOT NULL,
+  `idcategoria` TINYINT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(40) NOT NULL,
   `imagen` VARCHAR(30) NULL DEFAULT 'default.jpg',
   PRIMARY KEY (`idcategoria`))
@@ -53,7 +53,7 @@ COLLATE = utf8_spanish_ci;
 /* TABLA PRODUCTOS */
 DROP TABLE IF EXISTS `productos`;
 CREATE TABLE `innovatech`.`productos` (
-  `idProducto` SMALLINT NOT NULL,
+  `idProducto` SMALLINT NOT NULL AUTO_INCREMENT,
   `idCategoria` TINYINT NOT NULL,
   `nombre` VARCHAR(100) NOT NULL,
   `descripcion` VARCHAR(45) NULL,
@@ -75,7 +75,7 @@ USE innovatech;
 /* TABLA PEDIDOS */
 DROP TABLE IF EXISTS `pedidos`;
 CREATE TABLE `innovatech`.`pedidos` (
-  `idPedido` SMALLINT NOT NULL,
+  `idPedido` SMALLINT NOT NULL AUTO_INCREMENT,
   `fecha` DATE NULL,
   `estado` CHAR(1) NULL DEFAULT 'c',
   `idUsuario` SMALLINT NOT NULL,
@@ -96,7 +96,7 @@ use innovatech;
 /* TABLA LINEASPEDIDOS */
 DROP TABLE IF EXISTS `lineaspedidos`;
 CREATE TABLE `innovatech`.`lineaspedidos` (
-  `idLinea` SMALLINT NOT NULL,
+  `idLinea` SMALLINT NOT NULL AUTO_INCREMENT,
   `idPedido` SMALLINT NOT NULL,
   `idProducto` SMALLINT NOT NULL,
   `cantidad` TINYINT UNSIGNED NULL,

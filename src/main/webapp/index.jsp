@@ -30,36 +30,36 @@
             <h4 class="mt-4 mb-5 text-white"><strong>M&aacute;s Vendidos</strong></h4>
             <div class="row">
                 <c:forEach var="producto" items="${articulos}" varStatus="loop">
-                    <form action="${contexto}/CarritoController" method="POST" class="col-lg-4 col-md-6 mb-4">
-                        <input type="hidden" name="id" id="idProducto" value="${producto.id}"/>
-                            <div class="card">
-                                <div class="bg-image hover-zoom ripple" data-mdb-ripple-color="light">
-                                    <img src="IMG/productos/${producto.imagen}.jpg"
-                                        class="fixed-image-size" />
-                                    <a id="" href="#!">
-                                        <div class="mask">
-                                            <div class="d-flex justify-content-start align-items-end h-100">
-                                                <h5><span class="badge bg-danger ms-2">M&aacute;s Vendido</span></h5>
-                                            </div>
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <input type="hidden" name="id" class="idProducto" value="${producto.id}"/>
+                        <div class="card">
+                            <div class="bg-image hover-zoom ripple" data-mdb-ripple-color="light">
+                                <img src="IMG/productos/${producto.imagen}.jpg"
+                                    class="fixed-image-size" />
+                                <a class="linkProducto">
+                                    <div class="mask">
+                                        <div class="d-flex justify-content-start align-items-end h-100">
+                                            <h5><span class="badge bg-danger ms-2">M&aacute;s Vendido</span></h5>
                                         </div>
-                                        <div class="hover-overlay">
-                                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <a href="" class="text-reset">
-                                        <h5 class="card-title mb-3">${producto.nombre}</h5>
-                                    </a>
-                                    <a href="" class="text-reset">
-                                        <p>${producto.categoria.nombre}</p>
-                                    </a>
-                                    <h6 class="mb-3">
-                                        <strong class="text-success">${producto.precio}€</strong>
-                                    </h6>
-                                </div>
+                                    </div>
+                                    <div class="hover-overlay">
+                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                                    </div>
+                                </a>
                             </div>
-                    </form>
+                            <div class="card-body">
+                                <a href="" class="text-reset">
+                                    <h5 class="card-title mb-3">${producto.nombre}</h5>
+                                </a>
+                                <a href="" class="text-reset">
+                                    <p>${producto.categoria.nombre}</p>
+                                </a>
+                                <h6 class="mb-3">
+                                    <strong class="text-success">${producto.precio}€</strong>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
                 </c:forEach>
             </div>
         </div>

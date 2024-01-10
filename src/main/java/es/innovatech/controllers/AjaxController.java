@@ -186,6 +186,31 @@ public class AjaxController extends HttpServlet {
                 out.print(jsonResponse.toString());
                 out.flush();
                 break;
+            case "filtrarProductosID":
+                sb = new StringBuilder();
+                try {
+                    while ((line = request.getReader().readLine()) != null) {
+                        sb.append(line);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                context = request.getContextPath();
+                String idArticulo = jsonObject.getString("idProducto");
+                int idArticuloInt = Integer.parseInt(idArticulo);
+                articulosDAO = daof.getIArticulosDAO();
+                Articulo articulo = articulosDAO.getArticulo(idArticuloInt);
+                request.getSession().setAttribute("articulo", articulo);
+
+                jsonResponse = new JSONObject();
+                jsonResponse.put("redirectUrl", context + "/JSP/articulo.jsp");
+
+                response.setContentType("application/json");
+                out = response.getWriter();
+                out.print(jsonResponse.toString());
+                out.flush();
+                break;
             default:
                 break;
         }

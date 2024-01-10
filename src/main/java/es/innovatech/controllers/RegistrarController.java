@@ -22,9 +22,6 @@ import es.innovatech.DAOFactory.DAOFactory;
 import es.innovatech.DAO.ILineasPedidosDAO;
 import es.innovatech.DAO.IPedidosDAO;
 import es.innovatech.DAO.IUsuariosDAO;
-import es.innovatech.DAO.LineasPedidoDAO;
-import es.innovatech.DAO.PedidosDAO;
-import es.innovatech.DAO.UsuarioDAO;
 import es.innovatech.beans.Carrito;
 import es.innovatech.beans.Pedido;
 import es.innovatech.beans.Usuario;
@@ -137,36 +134,40 @@ public class RegistrarController extends HttpServlet {
                 int cantidad = 0;
 
                 List<Carrito> carrito = (List<Carrito>) request.getSession().getAttribute("carrito");
-                for (Carrito item : carrito) {
-                    importe += item.getArticulo().getPrecio() * item.getCantidad();
-                    idProducto = item.getArticulo().getId();
-                    cantidad = item.getCantidad();
-                    cantidades.add(cantidad);
-                    idProductos.add(idProducto);
-                }
-
-                usuarioDao.add(usuario);
-                IPedidosDAO pedidosDao = daof.getIPedidosDAO();
-                Pedido pedido = new Pedido();
-                usuario.setId(usuarioDao.getLastIdUsuario());
-                pedido.setUsuario(usuario);
-                pedido.setEstado(Estado.C);
-                pedido.setFecha(utils.getFechaActual());
-                pedido.setImporte(importe);
-                pedido.setIva(18);
-                pedidosDao.registrarPedido(pedido);
-                int idPedido = pedidosDao.getUltimoIdPedido();
-                ILineasPedidosDAO lineasPedidoDao = daof.getILineasPedidoDAO();
-                for (int i = 0; i < idProductos.size(); i++) {
-                    lineasPedidoDao.registrarLineaPedido(idPedido, idProductos.get(i), cantidades.get(i));
-                }
-                request.getSession().removeAttribute("carrito");
-                Cookie[] cookies = request.getCookies();
-                for (Cookie cookie : cookies) {
-                    if (cookie.getName().equals("carrito")) {
-                        cookie.setMaxAge(0);
-                        response.addCookie(cookie);
+                if (carrito != null) {
+                    for (Carrito item : carrito) {
+                        importe += item.getArticulo().getPrecio() * item.getCantidad();
+                        idProducto = item.getArticulo().getId();
+                        cantidad = item.getCantidad();
+                        cantidades.add(cantidad);
+                        idProductos.add(idProducto);
                     }
+
+                    usuarioDao.add(usuario);
+                    IPedidosDAO pedidosDao = daof.getIPedidosDAO();
+                    Pedido pedido = new Pedido();
+                    usuario.setId(usuarioDao.getLastIdUsuario());
+                    pedido.setUsuario(usuario);
+                    pedido.setEstado(Estado.C);
+                    pedido.setFecha(utils.getFechaActual());
+                    pedido.setImporte(importe);
+                    pedido.setIva(18);
+                    pedidosDao.registrarPedido(pedido);
+                    int idPedido = pedidosDao.getUltimoIdPedido();
+                    ILineasPedidosDAO lineasPedidoDao = daof.getILineasPedidoDAO();
+                    for (int i = 0; i < idProductos.size(); i++) {
+                        lineasPedidoDao.registrarLineaPedido(idPedido, idProductos.get(i), cantidades.get(i));
+                    }
+                    request.getSession().removeAttribute("carrito");
+                    Cookie[] cookies = request.getCookies();
+                    for (Cookie cookie : cookies) {
+                        if (cookie.getName().equals("carrito")) {
+                            cookie.setMaxAge(0);
+                            response.addCookie(cookie);
+                        }
+                    }
+                } else {
+                    usuarioDao.add(usuario);
                 }
                 exito = "Usuario registrado correctamente";
                 request.setAttribute("exito", exito);

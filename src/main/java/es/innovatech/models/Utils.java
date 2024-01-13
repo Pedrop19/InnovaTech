@@ -142,8 +142,6 @@ public class Utils {
      * @return true si el enlace es válido, false en caso contrario.
      */
     public boolean verifyEmailLink(String userEmail) {
-        // Lógica de verificación, por ejemplo, puedes validar si el correo está en tu base de datos local
-        // y marcarlo como verificado
         DAOFactory daof = DAOFactory.getDAOFactory();
         IUsuariosDAO usuarioDAO = daof.getIUsuarioDAO();
         Usuario usuario = usuarioDAO.getUsuariobyEmail(userEmail);

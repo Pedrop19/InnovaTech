@@ -63,7 +63,7 @@
         @Override
         public void update(Usuario usuario) {
             Connection connection = null;   
-            String query = "UPDATE usuarios SET nombre = ?, apellidos = ?, nif = ?, telefono = ?, direccion = ?, codigoPostal = ?, localidad = ?, provincia = ?, avatar = ?, password = ? WHERE email = ?";
+            String query = "UPDATE usuarios SET nombre = ?, apellidos = ?, nif = ?, telefono = ?, direccion = ?, codigoPostal = ?, localidad = ?, provincia = ?, avatar = ?, password = ?, verificado = ? WHERE email = ?";
             try {
                 connection = ConnectionFactory.getConnection();
                 connection.setAutoCommit(false);
@@ -78,7 +78,8 @@
                 ptmt.setString(8, usuario.getProvincia());
                 ptmt.setString(9, usuario.getAvatar());
                 ptmt.setString(10, usuario.getPassword());
-                ptmt.setString(11, usuario.getEmail());
+                ptmt.setBoolean(11, usuario.isVerificado());
+                ptmt.setString(12, usuario.getEmail());
                 ptmt.executeUpdate();
                 connection.commit();
             } catch (SQLException e) {
@@ -122,6 +123,7 @@
                     usuario.setCodigoPostal(rs.getInt("codigoPostal"));
                     usuario.setLocalidad(rs.getString("localidad"));
                     usuario.setProvincia(rs.getString("provincia"));
+                    usuario.setVerificado(rs.getBoolean("verificado"));
                     usuario.setAvatar(rs.getString("avatar"));
                     if(rs.getDate("ultimoAcceso") != null){
                         usuario.setUltimoAcceso(rs.getDate("ultimoAcceso"));
@@ -192,6 +194,7 @@
                     usuario.setCodigoPostal(rs.getInt("codigoPostal"));
                     usuario.setLocalidad(rs.getString("localidad"));
                     usuario.setProvincia(rs.getString("provincia"));
+                    usuario.setVerificado(rs.getBoolean("verificado"));
                     usuario.setAvatar(rs.getString("avatar"));
                     if(rs.getDate("ultimoAcceso") != null){
                         usuario.setUltimoAcceso(rs.getDate("ultimoAcceso"));
@@ -232,6 +235,7 @@
                     usuario.setCodigoPostal(rs.getInt("codigoPostal"));
                     usuario.setLocalidad(rs.getString("localidad"));
                     usuario.setProvincia(rs.getString("provincia"));
+                    usuario.setVerificado(rs.getBoolean("verificado"));
                     usuario.setAvatar(rs.getString("avatar"));
                     if(rs.getDate("ultimoAcceso") != null){
                         usuario.setUltimoAcceso(rs.getDate("ultimoAcceso"));

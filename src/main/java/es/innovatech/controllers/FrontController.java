@@ -151,17 +151,6 @@ public class FrontController extends HttpServlet {
                     url = "JSP/pedidosFinalizados.jsp";
                 }
                 break;
-            case "finalizar":
-                usuario = (Usuario) request.getSession().getAttribute("usuario");
-                if (usuario != null) {
-                    url = "JSP/pedido.jsp";
-                } else {
-                    error = "Debe iniciar sesión o registrarse para finalizar la compra";
-                    request.setAttribute("error", error);
-                    url = "index.jsp";
-                }
-            default:
-                break;
         }
 
         request.getRequestDispatcher(url).forward(request, response);

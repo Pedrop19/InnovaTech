@@ -130,68 +130,81 @@ public class RegistrarController extends HttpServlet {
                             }  
                         }
                     }
-                    nombreFichero.append(filePart.getSubmittedFileName());
-                            filePath = dirImagen + nombreFichero.toString();
-                            filePart.write(filePath);
-                            usuario.setAvatar(nombreFichero.toString());
-                            exito = "Usuario registrado correctamente";
-                            request.setAttribute("exito", exito);
-                            double importe = 0;
-                            List<Articulo> articulos = new ArrayList<>();
-                            short idProducto = 0;
-                            List<Integer> cantidades = new ArrayList<Integer>();
-                            int cantidad = 0;
+                    
+                    double importe = 0;
+                    List<Articulo> articulos = new ArrayList<>();
+                    short idProducto = 0;
+                    List<Integer> cantidades = new ArrayList<Integer>();
+                    int cantidad = 0;
 
-                            List<Carrito> carrito = (List<Carrito>) request.getSession().getAttribute("carrito");
-                            IArticulosDAO articulosDao = daof.getIArticulosDAO();
-                            Utils util = new Utils();
-                            if (carrito != null) {
-                                for (Carrito item : carrito) {
-                                    importe += item.getArticulo().getPrecio() * item.getCantidad();
-                                    idProducto = item.getArticulo().getId();
-                                    cantidad = item.getCantidad();
-                                    cantidades.add(cantidad);
-                                    articulos.add(articulosDao.getArticulo(idProducto));
-                                }
+                    List<Carrito> carrito = (List<Carrito>) request.getSession().getAttribute("carrito");
+                    IArticulosDAO articulosDao = daof.getIArticulosDAO();
+                    Utils util = new Utils();
+                    if (carrito != null) {
+                        for (Carrito item : carrito) {
+                            importe += item.getArticulo().getPrecio() * item.getCantidad();
+                            idProducto = item.getArticulo().getId();
+                            cantidad = item.getCantidad();
+                            cantidades.add(cantidad);
+                            articulos.add(articulosDao.getArticulo(idProducto));
+                        }
 
-                                usuarioDao.add(usuario);
-                                IPedidosDAO pedidosDao = daof.getIPedidosDAO();
-                                Pedido pedido = new Pedido();
-                                usuario.setId((short) usuarioDao.getLastIdUsuario());
-                                pedido.setUsuario(usuario);
-                                pedido.setEstado(Estado.C);
-                                pedido.setFecha(new Date());
-                                pedido.setImporte(importe);
-                                pedido.setIva(importe * 0.18);
-                                pedidosDao.registrarPedido(pedido);
-                                short idPedido = pedidosDao.getUltimoIdPedido();
-                                Pedido pedido2 = new Pedido();
-                                pedido2 = pedidosDao.getPedidoPorId(idPedido);
-                                ILineasPedidosDAO lineasPedidoDao = daof.getILineasPedidoDAO();
-                                List<LineaPedido> lineasPedido = new ArrayList<LineaPedido>();
-                                LineaPedido lineaPedido = new LineaPedido();
-                                for (int i = 0; i < articulos.size(); i++) {
-                                    lineaPedido.setArticulo(articulos.get(i));
-                                    lineaPedido.setCantidad(cantidades.get(i));
-                                    lineaPedido.setPedido(pedido2);
-                                    lineasPedidoDao.registrarLineaPedido(lineaPedido);
-                                    lineasPedido.add(lineaPedido);
-                                }
-                                pedido.setLineasPedido(lineasPedido);
-                                request.getSession().removeAttribute("carrito");
-                                Cookie[] cookies = request.getCookies();
-                                for (Cookie cookie : cookies) {
+                        usuarioDao.add(usuario);
+                        IPedidosDAO pedidosDao = daof.getIPedidosDAO();
+                        Pedido pedido = new Pedido();
+                        usuario.setId((short) usuarioDao.getLastIdUsuario());
+                        pedido.setUsuario(usuario);
+                        pedido.setEstado(Estado.C);
+                        pedido.setFecha(new Date());
+                        pedido.setImporte(importe);
+                        pedido.setIva(importe * 0.18);
+                        pedidosDao.registrarPedido(pedido);
+                        short idPedido = pedidosDao.getUltimoIdPedido();
+                        Pedido pedido2 = new Pedido();
+                        pedido2 = pedidosDao.getPedidoPorId(idPedido);
+                        ILineasPedidosDAO lineasPedidoDao = daof.getILineasPedidoDAO();
+                        List<LineaPedido> lineasPedido = new ArrayList<LineaPedido>();
+                        LineaPedido lineaPedido = new LineaPedido();
+                        for (int i = 0; i < articulos.size(); i++) {
+                            lineaPedido.setArticulo(articulos.get(i));
+                            lineaPedido.setCantidad(cantidades.get(i));
+                            lineaPedido.setPedido(pedido2);
+                            lineasPedidoDao.registrarLineaPedido(lineaPedido);
+                            lineasPedido.add(lineaPedido);
+                        }
+                        pedido.setLineasPedido(lineasPedido);
+                        request.getSession().removeAttribute("carrito");
+                        Cookie[] cookies = request.getCookies();
+                        for (Cookie cookie : cookies) {
 
 
-                                    if (cookie.getName().equals("carrito")) {
-                                        cookie.setMaxAge(0);
-                                        response.addCookie(cookie);
-                                    }
-                                }
-                            } else {
-                                usuarioDao.add(usuario);
+                            if (cookie.getName().equals("carrito")) {
+                                cookie.setMaxAge(0);
+                                response.addCookie(cookie);
                             }
-                            url = "index.jsp";
+                        }
+                    nombreFichero.append(filePart.getSubmittedFileName());
+                    filePath = dirImagen + nombreFichero.toString();
+                    filePart.write(filePath);
+                    usuario.setAvatar(nombreFichero.toString());
+                    exito = "Usuario registrado correctamente";
+                    String link = utils.generateVerificationLink(usuario.getEmail(), request.getContextPath());
+                    String cuerpo = "Bienvenido" + usuario.getNombre() + "a la tienda online de InnovaTech. Para verificar tu cuenta, haz click en el siguiente enlace: " + link;
+                    utils.enviarConGMail(usuario.getEmail(), "Verifica tu cuenta", cuerpo);
+                    request.setAttribute("exito", exito);
+                    } else {
+                        usuarioDao.add(usuario);
+                        nombreFichero.append(filePart.getSubmittedFileName());
+                        filePath = dirImagen + nombreFichero.toString();
+                        filePart.write(filePath);
+                        usuario.setAvatar(nombreFichero.toString());
+                        exito = "Usuario registrado correctamente";
+                        String link = utils.generateVerificationLink(usuario.getEmail(), request.getContextPath());
+                        String cuerpo = "Bienvenido " + usuario.getNombre() + " a la tienda online de InnovaTech.\n Para verificar tu cuenta, haz click en el siguiente enlace: " + link;
+                        utils.enviarConGMail(usuario.getEmail(), "Verifica tu cuenta", cuerpo);
+                        request.setAttribute("exito", exito);
+                    }
+                    url = "index.jsp";
                 } else {
                     error = "Faltan campos por rellenar";
                     url = "JSP/registrar.jsp";
@@ -208,6 +221,8 @@ public class RegistrarController extends HttpServlet {
     request.getRequestDispatcher(url).forward(request,response);
 
     }
+
+   
 
     /**
      * Devuelve una breve descripción del servlet.

@@ -26,6 +26,7 @@ CREATE TABLE `innovatech`.`usuarios` (
   `provincia` VARCHAR(30) NOT NULL,
   `ultimoAcceso` DATETIME NULL,
   `avatar` VARCHAR(30) NULL,
+  `verificado` TINYINT(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`idusuario`),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
 ENGINE = InnoDB

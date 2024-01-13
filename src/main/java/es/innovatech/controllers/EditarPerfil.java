@@ -74,7 +74,7 @@ public class EditarPerfil extends HttpServlet {
                 String email = request.getParameter("email");
                 usuarioDao.delete(email);
                 HttpSession session = request.getSession();
-                session.invalidate();
+                session.removeAttribute("usuario");
                 url = "index.jsp";
                 break;
             case "aceptar":

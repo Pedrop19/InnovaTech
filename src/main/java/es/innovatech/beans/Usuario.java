@@ -28,6 +28,7 @@ public class Usuario implements Serializable {
     private String provincia;
     private Date ultimoAcceso;
     private String avatar;
+    private boolean verificado;
 
     /**
      * Constructor predeterminado de la clase Usuario.
@@ -266,5 +267,23 @@ public class Usuario implements Serializable {
      */
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    /**
+     * Obtiene el estado de verificación del usuario.
+     * 
+     * @return El estado de verificación del usuario.
+     */
+    public boolean isVerificado() {
+        return verificado;
+    }
+
+    /**
+     * Establece el estado de verificación del usuario.
+     * 
+     * @param verificado El nuevo estado de verificación del usuario.
+     */
+    public void setVerificado(boolean verificado) {
+        this.verificado = verificado;
     }
 }

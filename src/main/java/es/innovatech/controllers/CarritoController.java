@@ -363,12 +363,18 @@ public class CarritoController extends HttpServlet {
 
             case "finalizar":
                 usuario = (Usuario) request.getSession().getAttribute("usuario");
-                if (usuario == null) {
-                    error = "Debes iniciar sesión o registrarte para finalizar la compra";
+                 if (usuario != null) {
+                    if(usuario.isVerificado()){
+                        url = "JSP/pedido.jsp";
+                    } else {
+                        error = "Debe verificar su cuenta para finalizar la compra";
+                        request.setAttribute("error", error);
+                        url = "index.jsp";
+                    }
+                } else {
+                    error = "Debe iniciar sesión o registrarse para finalizar la compra";
                     request.setAttribute("error", error);
                     url = "index.jsp";
-                } else {
-                    url = "JSP/pedido.jsp";
                 }
                 break;
 

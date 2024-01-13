@@ -2,6 +2,7 @@
 <html lang="es">
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
 <c:set var="carrito" value="${sessionScope.carrito}"/>
 <head>
@@ -17,8 +18,8 @@
     <link rel="stylesheet"  href="${css}">
     <link rel="icon" href="${icono}">
     <%-- <script src="${contexto}/JS/Carrito.js" defer></script> --%>
-    <script src="${contexto}/JS/Pedido.js" defer></script>
     <script src="${contexto}/JS/Busqueda.js" defer></script>
+    <script src="${contexto}/JS/SumarRestar.js" defer></script>
     <title>InnovaTech</title>
 </head>
 
@@ -29,54 +30,54 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <h1 class="text-center text-white">Factura</h1>
+                    <h3 class="text-center text-white">Pedidos Finalizados</h3>
                 </div>
             </div>
         </div>
         <table class="table align-middle mb-0 my-5" style="background-color: #d0daffa0;">
-           
-            <thead class="">
+            <thead class="text-black">
                 <tr>
-                    <th>Nombre</th>
-                    <th>Marca</th>
-                    <th>Precio</th>
-                    <th>Cantidad</th>
-                    <th>Acciones</th>
+                    <th>IdPedido</th>
+                    <th>Fecha</th>
+                    <th>Importe (Sin Iva)</th>
+                    <th>Iva</th>
+                    <th>Precio Total (Con IVA)</th>
                 </tr>
             </thead>
             <tbody id="tbody">
-                
-                <tr>
-                    <td>
-                        <p  class="fw-bold mb-1">Total (Con Iva)</p>
-                    </td>
-                    <td>
-                        <p class="fw-normal mb-1"></p>
-                    </td>
-                    <td>
-                        <p id="totalIva" class="fw-normal mb-1">120.00</p>
-                    </td>
-                    <td>
-                        <p id="cantidadTotal" class="fw-normal mb-1 ">3</p>
-                    </td>
-                    <td>
-                    <form action="/FinalizarCompraController" method="post">
-                        <button type="submit" class="btn btn-dark btn-rounded btn-sm fw-bold"
-                            data-mdb-ripple-color="dark">
-                            Finalizar Compra
-                        </button>
-                       
-                        <button type="button" class="btn btn-outline-danger btn-rounded btn-sm fw-bold"
-                            data-mdb-ripple-color="dark">
-                            Cancelar
-                        </button>
-                    </td>
-                    </form>
-
-                </tr>
+            <c:choose>
+                <c:when test="${empty sessionScope.pedidos}">
+                    <tr>
+                        <td colspan="5" class="text-center">No hay pedidos finalizados</td>
+                    </tr>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach var="pedido" items="${sessionScope.pedidos}">
+                    <fmt:parseDate var="fecha" value="${pedido.fecha}" pattern="yyyy-MM-dd" />
+                    
+                                <tr>
+                                    <td class="text-black">                      
+                                        <p class="fw-bold mb-1">${pedido.idPedido}</p>
+                                    </td>
+                                    <td class="text-black">
+                                        <p class="fw-normal mb-1"><fmt:formatDate value="${fecha}" pattern="dd/MM/yyyy" /></p>
+                                    </td>
+                                    <td class="text-black">
+                                        <p class="fw-normal mb-1">${pedido.importe}</p>
+                                    </td>
+                                    <td class="text-black">
+                                        <p class="fw-normal mb-1">${pedido.iva}</p>
+                                    </td>
+                                    <td class="text-black">
+                                        <p class="fw-normal mb-1">${pedido.importe + pedido.iva}</p>
+                                    </td>
+                                </tr>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
             </tbody>
-            
         </table>
+        <a href="${contexto}/index.jsp" class="btn btn-success">Volver</a>
     </section>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"></script>
     <jsp:directive.include file="/INC/footer.jsp"/>

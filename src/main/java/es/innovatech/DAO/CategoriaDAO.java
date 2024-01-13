@@ -1,6 +1,6 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * Haz clic en nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt para cambiar esta licencia
+ * Haz clic en nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java para editar esta plantilla
  */
 package es.innovatech.DAO;
 
@@ -13,13 +13,20 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- *
+ * La clase CategoriaDAO implementa la interfaz ICategoriasDAO y maneja la interacción con la base de datos
+ * para obtener información relacionada con las categorías.
+ * 
+ * Se utiliza el patrón DAO (Data Access Object) para encapsular el acceso a la base de datos.
+ * 
+ * La clase también contiene un método para cerrar la conexión con la base de datos.
+ * 
  * @author pedro
  */
-
 public class CategoriaDAO implements ICategoriasDAO {
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Categoria> getCategorias() {
         Connection conexion = null;
@@ -28,44 +35,45 @@ public class CategoriaDAO implements ICategoriasDAO {
         try {
             conexion = ConnectionFactory.getConnection();
             PreparedStatement obtenerCategorias = conexion.prepareStatement(query);
-            try(ResultSet rs = obtenerCategorias.executeQuery()){
+            try (ResultSet rs = obtenerCategorias.executeQuery()) {
                 while (rs.next()) {
                     Categoria categoria = new Categoria();
-                    categoria.setId(rs.getInt("idCategoria"));
+                    categoria.setId((byte) rs.getInt("idCategoria"));
                     categoria.setNombre(rs.getString("nombre"));
                     categoria.setImagen(rs.getString("imagen"));
                     categorias.add(categoria);
                 }
             }
-            this.closeConnection();
         } catch (SQLException e) {
             System.out.println("Error al obtener las categorias: " + e.getMessage());
         } finally {
             this.closeConnection();
         }
-        if(categorias.isEmpty()){
+        if (categorias.isEmpty()) {
             return null;
-        }else{
+        } else {
             return categorias;
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Categoria getCategoria(int id) {
+    public Categoria getCategoria(byte id) {
         Categoria categoria = new Categoria();
         Connection conexion = null;
         String query = "SELECT * FROM categorias WHERE idCategoria = ?";
-        try{
+        try {
             conexion = ConnectionFactory.getConnection();
             PreparedStatement obtenerCategorias = conexion.prepareStatement(query);
             obtenerCategorias.setInt(1, id);
             ResultSet rs = obtenerCategorias.executeQuery();
             while (rs.next()) {
-                categoria.setId(rs.getInt("idCategoria"));
+                categoria.setId((byte) rs.getInt("idCategoria"));
                 categoria.setNombre(rs.getString("nombre"));
                 categoria.setImagen(rs.getString("imagen"));
             }
-            this.closeConnection();
         } catch (SQLException e) {
             System.out.println("Error al obtener la categoria: " + e.getMessage());
         } finally {
@@ -74,6 +82,9 @@ public class CategoriaDAO implements ICategoriasDAO {
         return categoria;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void closeConnection() {
         ConnectionFactory.closeConnection();

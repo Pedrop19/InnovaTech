@@ -33,7 +33,6 @@ public class Utf8 implements Filter {
      */
     @Override
     public void init(FilterConfig fConfig) throws ServletException {
-        // TODO Auto-generated method stub
         encoding = fConfig.getInitParameter("requestEncoding");
         if (encoding == null) {
             encoding = "UTF-8";
@@ -46,7 +45,6 @@ public class Utf8 implements Filter {
      */
     @Override
     public void destroy() {
-        // TODO Auto-generated method stub
     }
 
     /**

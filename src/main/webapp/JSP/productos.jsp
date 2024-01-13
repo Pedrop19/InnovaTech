@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="${css}">
     <link rel="icon" href="${icono}">
     <script src="${contexto}/JS/Busqueda.js" defer></script>
+    <script src="${contexto}/JS/SumarRestar.js" defer></script>
     <title>InnovaTech</title>
 </head>
  
@@ -41,15 +42,15 @@
                     <div class="row">
                         <c:forEach var="producto" items="${productos}" varStatus="loop">
                             <form action="${contexto}/CarritoController" method="POST" class="col-lg-4 col-md-6 mb-4">
-                                <input type="hidden" name="id" id="idProducto" value="${producto.id}"/>
+                                <input type="hidden" name="id" class="idProducto" value="${producto.id}"/>
                                     <div class="card">
                                         <div class="bg-image hover-zoom ripple" data-mdb-ripple-color="light">
                                             <img src="${contexto}/IMG/productos/${producto.imagen}.jpg"
-                                                class="fixed-image-size" />
-                                            <a id="a-link" href="#!">
+                                                class="fixed-image-size p-4" />
+                                            <a class="linkProducto">
                                                 <div class="mask">
                                                     <div class="d-flex justify-content-start align-items-end h-100">
-                                                        <h5><span class="badge bg-danger ms-2">M&aacute;s Vendido</span></h5>
+                                                        <h5><span class="badge bg-info ms-2">${producto.marca}</span></h5>
                                                     </div>
                                                 </div>
                                                 <div class="hover-overlay">

@@ -5,6 +5,9 @@ let idElement = document.querySelectorAll(".idArticulo");
 let precioTotalElement = document.querySelectorAll(".precioTotal");
 let precioElement = document.querySelectorAll(".precioArticulo");
 let itemsCarritoElement = document.querySelector(".item-carrito");
+let precioTotalPedidoconIva = document.getElementById("precioTotalPedido");
+let carritoSizeElement = document.getElementById("carritoSize");
+
 
 
 
@@ -21,7 +24,8 @@ for (let i = 0; i < btnMasElement.length; i++) {
             .then(data => {
                 console.log(data);
                 let cantidad = cantidadElement[i];
-                cantidad.innerHTML = data;
+                carritoSizeElement.innerHTML = data.size;
+                cantidad.innerHTML = data.cantidad;
                 if (cantidad.innerHTML == 0) {
                     let parentElement = btnMasElement[i].closest(".item-carrito");
                     console.log(parentElement);
@@ -49,7 +53,8 @@ for (let i = 0; i < btnMenosElement.length; i++) {
             .then(data => {
                 console.log(data);
                 let cantidad = cantidadElement[i];
-                cantidad.innerHTML = data;
+                cantidad.innerHTML = data.cantidad;
+                carritoSizeElement.innerHTML = data.size;
                 if (cantidad.innerHTML == 0) {
                     let parentElement = btnMenosElement[i].closest(".item-carrito");
                     console.log(parentElement)
@@ -63,3 +68,13 @@ for (let i = 0; i < btnMenosElement.length; i++) {
             });
 });
 }
+
+
+if(precioTotalPedidoconIva != null){
+    precioTotalElement.forEach(element => {
+        let precioTotalPedido = 0;
+        precioTotalPedido = ((parseFloat(precioTotalPedido) + parseFloat(element.innerHTML)) * 0.18 + parseFloat(element.innerHTML)).toFixed(2);
+        precioTotalPedidoconIva.innerHTML = precioTotalPedido;
+    });
+}
+

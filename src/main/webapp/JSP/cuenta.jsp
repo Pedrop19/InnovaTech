@@ -16,6 +16,7 @@
         <link rel="icon" href="${icono}">
         <script src="${contexto}/JS/Busqueda.js" defer></script>
         <script src="${contexto}/JS/EditarPerfil.js" defer></script>
+        <script src="${contexto}/JS/SumarRestar.js" defer></script>
         <title>InnovaTech</title>
     </head>
 

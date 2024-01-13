@@ -80,6 +80,7 @@
                 <version>2.6</version>
                 <executions>
                     <execution>
+                        <?m2e execute onConfiguration?>
                         <phase>validate</phase>
                         <goals>
                             <goal>copy</goal>

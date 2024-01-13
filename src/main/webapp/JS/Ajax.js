@@ -60,6 +60,7 @@ function validateEmail() {
     })
         .then(response => response.json())
         .then(data => {
+            console.log(data);
             if (data === true) {
                 if(error.classList.contains("text-success")){
                 error.classList.remove("text-success");

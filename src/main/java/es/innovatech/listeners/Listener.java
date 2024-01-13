@@ -14,10 +14,7 @@ import es.innovatech.DAOFactory.DAOFactory;
 import es.innovatech.DAO.IArticulosDAO;
 import es.innovatech.DAO.ICategoriasDAO;
 import es.innovatech.beans.Categoria;
-import es.innovatech.beans.Articulo;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -28,13 +25,12 @@ public class Listener implements ServletContextListener, HttpSessionListener, Ht
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-
         DAOFactory daoFactory = DAOFactory.getDAOFactory();
         ICategoriasDAO categoriasDAO = daoFactory.getICategoriasDAO();
+        IArticulosDAO articulosDAO = daoFactory.getIArticulosDAO();
+        List<String> marcas = articulosDAO.getMarcas();
         List<Categoria> categorias = categoriasDAO.getCategorias();
         sce.getServletContext().setAttribute("categorias", categorias);
-
-
-
+        sce.getServletContext().setAttribute("marcas", marcas);
     }
 }

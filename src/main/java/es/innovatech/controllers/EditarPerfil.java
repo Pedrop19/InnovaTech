@@ -22,7 +22,10 @@ import es.innovatech.beans.Usuario;
 import es.innovatech.models.Utils;
 
 /**
- *
+ * El controlador EditarPerfil maneja las solicitudes relacionadas con la edición del perfil del usuario.
+ * 
+ * Este servlet utiliza la anotación @WebServlet para mapear las URL que maneja.
+ * 
  * @author pedro
  */
 @WebServlet(name = "EditarPerfil", urlPatterns = { "/EditarPerfil" })
@@ -40,15 +43,16 @@ public class EditarPerfil extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Maneja las solicitudes HTTP POST. Realiza diversas acciones según el botón presionado.
      *
-     * @param request  servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @param request  solicitud del servlet
+     * @param response respuesta del servlet
+     * @throws ServletException si ocurre un error específico del servlet
+     * @throws IOException      si ocurre un error de entrada/salida
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -168,13 +172,13 @@ public class EditarPerfil extends HttpServlet {
     }
 
     /**
-     * Returns a short description of the servlet.
+     * Devuelve una breve descripción del servlet.
      *
-     * @return a String containing servlet description
+     * @return una cadena que contiene la descripción del servlet
      */
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
 }

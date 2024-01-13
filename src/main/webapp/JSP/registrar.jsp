@@ -16,6 +16,7 @@
         <link rel="icon" href="${icono}">
         <script src="${contexto}/JS/Busqueda.js" defer></script>
         <script src="${contexto}/JS/Ajax.js" defer></script>
+        <script src="${contexto}/JS/SumarRestar.js" defer></script>
         <title>InnovaTech</title>
     </head>
 
@@ -69,7 +70,7 @@
                                             <span class="input-group-text" id="basic-addon1"><i
                                                     class="fa-solid fa-address-card"></i></span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="nif" class="form-control" name="nif"/>
+                                                <input type="text" id="nif" class="form-control" name="nif" autocomplete="false"/>
                                                 <label class="form-label">NIF</label>
                                             </div>
                                         </div>
@@ -173,9 +174,7 @@
                             </div>
                         </div>
                     </div>
-                    <c:if test="${error != null}">
-                        <p class="text-center text-danger mt-3">${error}</p>
-                    </c:if>
+                    
                     <p class="text-center text-danger mt-3" id="error"></p>
                     <div class="px-5 justify-content-center align-items-center d-flex mt-3">
                         <button type="submit" name="button" id="btn-registrar" value="registrar"

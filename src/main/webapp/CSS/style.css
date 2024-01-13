@@ -10,7 +10,7 @@
 }
 
 .table-element th, td, tr{
-    background-color: #152140be !important;
+    background-color: #fff !important;
 }
 
 .modal-carrito{
@@ -22,7 +22,6 @@
     top: 0;
     width: 600px;
     height: max-content;
-    background-color: #fff;
     z-index: 1000;
     padding: 1rem;
     border-radius: 0 0 0 1rem;
@@ -30,12 +29,32 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     height: 100%;
     animation: left 0.5s ease;
-    background: #d0daffa0; 
+    background: #fff; 
+    color:black;
+}
+
+.modal-filtros{
+    left: 0 !important;
+    transform-origin: top left;
+    transform: scale(0);
+    transition: transform 0.3s ease;
+    position: absolute;
+    top: 0;
+    width: 600px;
+    height: max-content;
+    background-color: #fff;
+    z-index: 1000;
+    padding: 1rem;
+    border-radius: 0 0 1rem 0;
+    margin: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    height: 100%;
+    animation: right 0.5s ease;
     color:black;
 }
 
 .modal-carrito .modal-content{
-    background: #d0daffd1;
+    background: #8f3b3bb0;
 }
 
 @keyframes left {
@@ -126,3 +145,4 @@
 .select{
     flex: 0.3 !important;
 }
+

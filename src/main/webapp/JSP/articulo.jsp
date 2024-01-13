@@ -16,6 +16,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css" rel="stylesheet" />
     <link rel="stylesheet"  href="${css}">
     <link rel="icon" href="${icono}">
+    <script src="${contexto}/JS/Busqueda.js" defer></script>
+    <script src="${contexto}/JS/SumarRestar.js" defer></script>
     <title>InnovaTech</title>
 </head>
 

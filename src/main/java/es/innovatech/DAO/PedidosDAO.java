@@ -5,21 +5,30 @@
 package es.innovatech.DAO;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import es.innovatech.DAOFactory.DAOFactory;
 import es.innovatech.beans.Pedido;
+import es.innovatech.beans.Usuario;
 import es.innovatech.enums.Estado;
 
 /**
- *
+ * Clase que implementa la interfaz IPedidosDAO para gestionar los pedidos en la base de datos.
+ * 
  * @author pedro
  */
 public class PedidosDAO implements IPedidosDAO {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void registrarPedido(Pedido pedido) {
         Connection connection = null;
@@ -29,17 +38,16 @@ public class PedidosDAO implements IPedidosDAO {
             connection.setAutoCommit(false);
             PreparedStatement obtenerPedidos = connection.prepareStatement(query);
             obtenerPedidos.setInt(1, pedido.getUsuario().getId());
-            obtenerPedidos.setDate(2, java.sql.Date.valueOf(java.time.LocalDate.now()));
+            obtenerPedidos.setDate(2, Date.valueOf(LocalDate.now()));
             obtenerPedidos.setString(3, pedido.getEstado().toString());
             obtenerPedidos.setDouble(4, pedido.getImporte());
             obtenerPedidos.setDouble(5, pedido.getIva());
             obtenerPedidos.executeUpdate();
             connection.commit();
-            this.closeConnection();
         } catch (SQLException e) {
             if (connection != null) {
                 try {
-                    e.printStackTrace();
+                    System.out.println("Error al registrar el pedido: " + e.getMessage());
                     connection.rollback();
                 } catch (SQLException rollbackException) {
                     rollbackException.printStackTrace();
@@ -50,27 +58,36 @@ public class PedidosDAO implements IPedidosDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public List<Pedido> listarPedidos(int idUsuario) {
+    public List<Pedido> listarPedidos(short idUsuario, Estado estado) {
         List<Pedido> pedidos = new ArrayList<Pedido>();
+        Connection conexion = null;
+        String query = "SELECT * FROM pedidos WHERE idUsuario = ? AND estado = ?";
         try {
-            Connection conexion = ConnectionFactory.getConnection();
-            String query = "SELECT * FROM pedidos WHERE idUsuario = ?";
+            conexion = ConnectionFactory.getConnection();
             PreparedStatement obtenerPedidos = conexion.prepareStatement(query);
             obtenerPedidos.setInt(1, idUsuario);
+            obtenerPedidos.setString(2, estado.toString());
             try (ResultSet rs = obtenerPedidos.executeQuery()) {
+                DAOFactory daof = DAOFactory.getDAOFactory();
+                IUsuariosDAO usuariosDAO = daof.getIUsuarioDAO();
+                Usuario usuario = usuariosDAO.getUsuarioPorId(idUsuario);
                 while (rs.next()) {
                     Pedido pedido = new Pedido();
-                    pedido.setIdPedido(rs.getInt("idPedido"));
-                    pedido.setUsuario(new UsuarioDAO().getUsuarioPorId(rs.getInt("idUsuario")));
-                    pedido.setFecha(rs.getDate("fecha"));
+                    pedido.setIdPedido((short) rs.getInt("idPedido"));
+                    pedido.setUsuario(usuario);
+                    if(rs.getDate("fecha") != null){
+                        pedido.setFecha(rs.getDate("fecha"));
+                    }
                     pedido.setEstado(Estado.valueOf(rs.getString("estado")));
                     pedido.setImporte(rs.getDouble("importe"));
                     pedido.setIva(rs.getDouble("iva"));
                     pedidos.add(pedido);
                 }
             }
-            this.closeConnection();
         } catch (SQLException e) {
             System.out.println("Error al obtener los pedidos: " + e.getMessage());
         } finally {
@@ -83,47 +100,66 @@ public class PedidosDAO implements IPedidosDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Pedido getPedidoPorEstado(int idUsuario, Estado estado) {
-        Pedido pedido = new Pedido();
+    public Pedido getPedidoPorEstado(short idUsuario, Estado estado) {
+        Pedido pedido = null;
         Connection conexion = null;
-        String query = "SELECT * FROM pedidos WHERE idUsuario = ? AND estado = ?";
+    
         try {
+            DAOFactory daof = DAOFactory.getDAOFactory();
+            IUsuariosDAO usuariosDAO = daof.getIUsuarioDAO();
+            Usuario usuario = usuariosDAO.getUsuarioPorId(idUsuario);
+    
+            String query = "SELECT idPedido, fecha, estado, importe, iva FROM pedidos WHERE idUsuario = ? AND estado = ? LIMIT 1";
+    
             conexion = ConnectionFactory.getConnection();
-            PreparedStatement obtenerPedidos = conexion.prepareStatement(query);
-            obtenerPedidos.setInt(1, idUsuario);
-            obtenerPedidos.setString(2, estado.toString());
-            ResultSet rs = obtenerPedidos.executeQuery();
-            while (rs.next()) {
-                pedido.setIdPedido(rs.getInt("idPedido"));
-                pedido.setUsuario(new UsuarioDAO().getUsuarioPorId(rs.getInt("idUsuario")));
-                pedido.setFecha(rs.getDate("fecha"));
-                pedido.setEstado(Estado.valueOf(rs.getString("estado")));
-                pedido.setImporte(rs.getDouble("importe"));
-                pedido.setIva(rs.getDouble("iva"));
+            try (PreparedStatement obtenerPedidos = conexion.prepareStatement(query)) {
+                obtenerPedidos.setInt(1, idUsuario);
+                obtenerPedidos.setString(2, estado.toString());
+    
+                try (ResultSet rs = obtenerPedidos.executeQuery()) {
+                    if (rs.next()) {
+                        pedido = new Pedido();
+                        pedido.setIdPedido((short) rs.getInt("idPedido"));
+                        pedido.setUsuario(usuario);
+                        if(rs.getDate("fecha") != null){
+                            pedido.setFecha(rs.getDate("fecha"));
+                        }
+                        pedido.setEstado(Estado.valueOf(rs.getString("estado")));
+                        pedido.setImporte(rs.getDouble("importe"));
+                        pedido.setIva(rs.getDouble("iva"));
+                    }
+                }
             }
-            this.closeConnection();
         } catch (SQLException e) {
             System.out.println("Error al obtener los pedidos: " + e.getMessage());
         } finally {
             this.closeConnection();
         }
+    
         return pedido;
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void actualizarPedido(Pedido pedido) {
         Connection connection = null;
-        String query = "UPDATE pedidos SET importe = ? WHERE idPedido = ?";
+        
+        String query = "UPDATE pedidos SET importe = ?, estado = ? WHERE idPedido = ?;";
         try {
             connection = ConnectionFactory.getConnection();
             connection.setAutoCommit(false);
             PreparedStatement obtenerPedidos = connection.prepareStatement(query);
             obtenerPedidos.setDouble(1, pedido.getImporte());
-            obtenerPedidos.setInt(2, pedido.getIdPedido());
+            obtenerPedidos.setString(2, pedido.getEstado().toString());
+            obtenerPedidos.setInt(3, pedido.getIdPedido());
             obtenerPedidos.executeUpdate();
             connection.commit();
-            this.closeConnection();
         } catch (SQLException e) {
             if (connection != null) {
                 try {
@@ -138,10 +174,16 @@ public class PedidosDAO implements IPedidosDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Pedido getPedidoPorId(int idPedido) {
+    public Pedido getPedidoPorId(short idPedido) {
         Pedido pedido = new Pedido();
         Connection connection = null;
+        DAOFactory daof = DAOFactory.getDAOFactory();
+        IUsuariosDAO usuariosDAO = daof.getIUsuarioDAO();
+        Usuario usuario = new Usuario();
         String query = "SELECT * FROM pedidos WHERE idPedido = ?";
         try {
             connection = ConnectionFactory.getConnection();
@@ -149,9 +191,12 @@ public class PedidosDAO implements IPedidosDAO {
             obtenerPedidos.setInt(1, idPedido);
             ResultSet rs = obtenerPedidos.executeQuery();
             while (rs.next()) {
-                pedido.setIdPedido(rs.getInt("idPedido"));
-                pedido.setUsuario(new UsuarioDAO().getUsuarioPorId(rs.getInt("idUsuario")));
-                pedido.setFecha(rs.getDate("fecha"));
+                usuario = usuariosDAO.getUsuarioPorId((short) rs.getInt("idUsuario"));
+                pedido.setIdPedido((short) rs.getInt("idPedido"));
+                pedido.setUsuario(usuario);
+                if(rs.getDate("fecha") != null){
+                    pedido.setFecha(rs.getDate("fecha"));
+                }
                 pedido.setEstado(Estado.valueOf(rs.getString("estado")));
                 pedido.setImporte(rs.getDouble("importe"));
                 pedido.setIva(rs.getDouble("iva"));
@@ -164,9 +209,12 @@ public class PedidosDAO implements IPedidosDAO {
         return pedido;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public int getUltimoIdPedido() {
-        int idPedido = 0;
+    public short getUltimoIdPedido() {
+        short idPedido = 0;
         Connection connection = null;
         String query = "SELECT LAST_INSERT_ID()";
         try {
@@ -174,7 +222,7 @@ public class PedidosDAO implements IPedidosDAO {
             PreparedStatement obtenerPedidos = connection.prepareStatement(query);
             ResultSet rs = obtenerPedidos.executeQuery();
             while (rs.next()) {
-                idPedido = rs.getInt("LAST_INSERT_ID()");
+                idPedido = (short) rs.getInt("LAST_INSERT_ID()");
             }
         } catch (SQLException e) {
             System.out.println("Error al obtener los pedidos: " + e.getMessage());
@@ -184,6 +232,37 @@ public class PedidosDAO implements IPedidosDAO {
         return idPedido;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deletePedido(short idPedido) {
+        Connection connection = null;
+        String query = "DELETE FROM pedidos WHERE idPedido = ?";
+        try {
+            connection = ConnectionFactory.getConnection();
+            connection.setAutoCommit(false);
+            PreparedStatement obtenerPedidos = connection.prepareStatement(query);
+            obtenerPedidos.setInt(1, idPedido);
+            obtenerPedidos.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    e.printStackTrace();
+                    connection.rollback();
+                } catch (SQLException rollbackException) {
+                    rollbackException.printStackTrace();
+                }
+            }
+        } finally {
+            this.closeConnection();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void closeConnection() {
         ConnectionFactory.closeConnection();

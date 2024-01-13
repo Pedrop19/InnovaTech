@@ -7,9 +7,7 @@ CREATE DATABASE `innovatech` DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish_ci 
 USE `innovatech`;
 
 /* INSERTAR UN USUARIO CON PERMISOS EN LA BBDD */
-CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
-GRANT ALL PRIVILEGES ON innovatech.* TO 'admin'@'localhost';
-FLUSH PRIVILEGES;
+
 
 
 /* TABLA USUARIOS */

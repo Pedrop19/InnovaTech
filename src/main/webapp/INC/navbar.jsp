@@ -1,35 +1,59 @@
 <div class="nac w-100 d-flex  justify-content-center bg-transparent">
     <nav class="navbar navbar-expand-lg mt-4 d-flex flex-column  navbar-light rounded-6 "
         style="background: #d0daffa0;">
+
         <!-- Primera linea -->
         <div class="container-fluid ">
+        <i class="fas fa-bars fs-4 mx-2" data-mdb-modal-init data-mdb-target="#filtroModal"></i>
+                <div class="modal right fade" id="filtroModal" tabindex="-1" aria-labelledby="filtroModalLabel"
+                    aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+                    <div class="modal-dialog modal-filtros w-100">
+                        <div class="modal-content bg-info">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="filtroModalLabel">B&uacute;squeda Avanzada</h5>
+                                <button type="button" class="btn-close" data-mdb-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <label for="categoria">Categor&iacute;as</label>
+                                <select class="form-select" name="categoria" id="categoria">
+                                    <option value="0" selected>Todas las categorias</option>
+                                    <c:forEach var="categoria" items="${categorias}">
+                                        <option value="${categoria.id}">${categoria.nombre}</option>
+                                    </c:forEach>
+                                </select>
+                                <br>
+                                <label for="marca">Marcas</label>
+                                <select class="form-select" name="marca" id="marca">
+                                    <option value="0" selected>Todas las marcas</option>
+                                    <c:forEach var="marca" items="${marcas}">
+                                        <option value="${marca}">${marca}</option>
+                                    </c:forEach>
+                                </select>
+                                <br>
+                                <label class="form-label" for="precioFiltro">Precio (1 - 1880)</label>
+                                <div class="range" data-mdb-range-init>
+                                <input type="range" class="form-range" min="1" max="${sessionScope.precioMasAlto}" id="precioFiltro" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             <!-- Toggle button -->
-            <button data-mdb-collapse-init class="navbar-toggler" type="button"
-                data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <div class="input-group">
-                    <select class="form-select form-select-sm select" name="categoria input-group-text bg-transparent" id="categorias">
-                        <option value="0">Categorias</option>
-                        <c:forEach var="categoria" items="${applicationScope.categorias}">
-                            <option name="categoria" value="${categoria.id}">${categoria.nombre}</option>
-                        </c:forEach>
-                    </select>
+                    
                     <input type="search" id="searchInput" class="form-control" style="background: #d0daffa0; color:black"
-                        placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                        placeholder="Search" aria-label="Search" list="datalistOptions" aria-describedby="search-addon" />
                     <span class="input-group-text bg-white" id="search-addon">
+                        <datalist id="datalistOptions">
+                        <c:forEach var="articulo" items="${articulos2}">
+                            <option data-id="${articulo.id}" value="${articulo.nombre}"></option>
+                        </c:forEach>
+                        </datalist>
                         <i class="fas fa-search"></i>
                     </span>
-                                        <%-- <div class="input-group mb-3 mt-4">
-                        <span class="input-group-text" id="basic-addon1">@</span>
-                        <input type="text" id="search" class="form-control" aria-describedby="basic-addon1">
-                        <span class="input-group-text" id="basic-addon1"><i</span>
-                    </div> --%>
                 </div>
-                <a class="navbar-brand mt-2 p-2 mt-lg-0" href="#">
+                <a class="navbar-brand mt-2 p-2 mt-lg-0" href="${contexto}/index.jsp">
                     <img src="${contexto}/IMG/Logo.png" height="35" alt="Logo" loading="lazy" />
                 </a>
                 <div class="blank col-4 ">
@@ -78,7 +102,7 @@
                                             </div>
                                             <div class="modal-body  text-center">
                                                 <h5 class="modal-title" id="cuentaModalLabel">Mi cuenta</h5>
-                                                <div class="mb-3">
+                                                <div class="mb-3">                                              
                                                     <button type="submit" class="btn btn-primary" name="button"
                                                         value="vercuenta">Editar mi perfil</button><br><br>
                                                     <button type="submit" class="btn btn-primary" name="button"
@@ -104,14 +128,14 @@
                                     </button>
                                     <div class="modal top fade" id="iniciarModal" tabindex="-1" aria-labelledby="iniciarModalLabel"
                                         aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
-                                        <div class="modal-dialog   modal-dialog-centered">
-                                            <div class="modal-content" style="background: #484849e9; color:black;">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content bg-light">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="iniciarModalLabel">Iniciar Sesi&oacute;n</h5>
                                                     <button type="button" class="btn-close" data-mdb-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
-                                                <div class="modal-body">
+                                                <div class="modal-body bg-dark rounded-2">
                                                     <div class="mb-3">
                                                         <div data-mdb-input-init class="form-outline mb-4">
                                                             <input type="text" class="input-box form-control"
@@ -125,22 +149,23 @@
                                                                 for="form3Example3">Contrase&ntilde;a</label>
                                                         </div>
                                                     </div>
-                                                    <p class="text-center">&iquest;No tienes cuenta? <button type="submit"
+                                                    <p class="text-center text-white">&iquest;No tienes cuenta? <button type="button"
                                                             class="bg-transparent border-0 text-info" name="button"
                                                             value="registrar">Registrate</button></p>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-secondary" data-mdb-dismiss="modal"
+                                                    <button type="submit" class="btn btn-dark" name="button"
+                                                        value="aceptar">Aceptar</button>
+                                                    <button type="button" class="btn btn-danger" data-mdb-dismiss="modal"
                                                         name="button" value="cancelar">
                                                         Cancelar
                                                     </button>
-                                                    <button type="submit" class="btn btn-dark" name="button"
-                                                        value="aceptar">Aceptar</button>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="button" name="button" value="registrar" class="btn btn-dark"><a class="text-white"
+                                    <button type="button" name="button" value="registrar" class="btn btn-light"><a class="text-black"
                                             href="${contexto}/JSP/registrar.jsp">Registrarse</a></button>
                                 </c:otherwise>
                         </c:choose>
@@ -164,15 +189,14 @@
                                             <table class="table table-element table-hover bg-info">
                                                 <thead>
                                                     <tr>
-                                                        <th class="text-white" scope="col">Imagen</th>
-                                                        <th class="text-white" scope="col">Producto</th>
-                                                        <th class="text-white" scope="col">Cantidad</th>
-                                                        <th class="text-white" scope="col">Total</th>
-                                                        <th class="text-white" scope="col">Acciones</th>
+                                                        <th class="text-black" scope="col">Imagen</th>
+                                                        <th class="text-black" scope="col">Producto</th>
+                                                        <th class="text-black" scope="col">Cantidad</th>
+                                                        <th class="text-black" scope="col">Total</th>
+                                                        <th class="text-black" scope="col">Acciones</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="bodyTable">
-                                                
                                                     <c:choose>
                                                         <c:when test="${sessionScope.carrito != null}">
                                                             <c:forEach var="carrito" items="${sessionScope.carrito}">
@@ -182,10 +206,11 @@
                                                                     <tr class="item-carrito">
                                                                         <td><img src="${contexto}/IMG/productos/${carrito.articulo.imagen}.jpg"
                                                                                 height="50" alt="Logo" loading="lazy" /></td>
-                                                                        <td class="text-white">${carrito.articulo.nombre}</td>
-                                                                        <td><button type="button"  class="fas fa-minus-circle mx-2 rounded-circle p-0 bg-info btn-menos"></button><span class="text-white cantidad">${carrito.cantidad}</span><button type="button"
+                                                                        <td class="text-black">${carrito.articulo.nombre}</td>
+                                                                        <td><button type="button"  class="fas fa-minus-circle mx-2 rounded-circle p-0 bg-info btn-menos"></button><span class="text-black cantidad">${carrito.cantidad}</span><button type="button"
                                                                                 class="fas fa-plus-circle mx-2 rounded-circle p-0 bg-info btn-mas"></button></td>
-                                                                        <td class="text-white precioTotal">${carrito.articulo.precio * carrito.cantidad}</td>
+                                                                        <fmt:formatNumber value="${carrito.articulo.precio * carrito.cantidad}" pattern="#,##0.00" var="precioFormateado" />
+                                                                        <td class="text-black precioTotal">${precioFormateado}</td>
                                                                         <td><button type="submit" value="eliminar" class="btn btn-danger"
                                                                                 name="button" value="eliminarCarrito"
                                                                                 >Eliminar</button>
@@ -224,29 +249,24 @@
                 </div>
             </div>
         </div>
-        <div class="container-fluid  d-flex w-100 justify-content-center">
-            <div class="row">
-                <div class="col-12">
-                    <ul class="nav justify-content-center">
-                        <li class="nav-item">
-                            <a class="nav-link text-black  fw-bold" aria-current="page"
-                                href="${contexto}/index.jsp">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-black fw-bold" href="#">Servicios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-black fw-bold" href="${contexto}/JSP/pedido.jsp">Contacto</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
                 <c:if test="${error != null}">
-                    <p class="text-center text-danger">${error}</p>
+                    <script>
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "${error}",
+                            });
+                    </script>
                 </c:if>
                 <c:if test="${exito != null}">
-                    <p class="text-center text-success">${exito}</p>
+                    <script>
+                        Swal.fire({
+                            title: "Exito!",
+                            text: "${exito}",
+                            icon: "success"
+                            });
+                    </script>
                 </c:if>
     </nav>
+</div>
 </div>

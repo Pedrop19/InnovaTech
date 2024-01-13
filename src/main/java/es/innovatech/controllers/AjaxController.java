@@ -21,39 +21,49 @@ import org.json.JSONObject;
 import es.innovatech.DAOFactory.DAOFactory;
 import es.innovatech.DAO.IArticulosDAO;
 import es.innovatech.DAO.ICategoriasDAO;
+import es.innovatech.DAO.ILineasPedidosDAO;
+import es.innovatech.DAO.IPedidosDAO;
 import es.innovatech.DAO.IUsuariosDAO;
 import es.innovatech.beans.Articulo;
 import es.innovatech.beans.Carrito;
 import es.innovatech.beans.Categoria;
+import es.innovatech.beans.LineaPedido;
+import es.innovatech.beans.Pedido;
 import es.innovatech.beans.Usuario;
+import es.innovatech.enums.Estado;
 import es.innovatech.models.Utils;
 
 /**
- *
+ * El controlador Ajax maneja las solicitudes Ajax del cliente.
+ * 
+ * Este servlet utiliza la anotación @WebServlet para mapear las URL que maneja.
+ * 
  * @author pedro
  */
 @WebServlet(name = "AjaxController", urlPatterns = { "/AjaxController" })
 public class AjaxController extends HttpServlet {
+
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Maneja las solicitudes HTTP GET. Redirige a la página de inicio.
      *
-     * @param request  servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @param request  solicitud del servlet
+     * @param response respuesta del servlet
+     * @throws ServletException si ocurre un error específico del servlet
+     * @throws IOException      si ocurre un error de entrada/salida
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Maneja las solicitudes HTTP POST.
      *
-     * @param request  servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @param request  solicitud del servlet
+     * @param response respuesta del servlet
+     * @throws ServletException si ocurre un error específico del servlet
+     * @throws IOException      si ocurre un error de entrada/salida
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -79,78 +89,192 @@ public class AjaxController extends HttpServlet {
         String cantidadString = "";
         PrintWriter out = response.getWriter();
         DAOFactory daof = DAOFactory.getDAOFactory();
-        
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
 
         switch (accion) {
             case "sumar":
-                id = jsonObject.getString("id");
-                carritoList = (List<Carrito>) session.getAttribute("carrito");
-                int idInt = Integer.parseInt(id);
-                for (Carrito carrito : carritoList) {
-                    if (carrito.getArticulo().getId() == idInt) {
-                        carrito.setCantidad(carrito.getCantidad() + 1);
-                        cantidad = carrito.getCantidad();
-                        break;
+                if (usuario == null) {
+                    id = jsonObject.getString("id");
+                    carritoList = (List<Carrito>) session.getAttribute("carrito");
+                    int idInt = Integer.parseInt(id);
+                    for (Carrito carrito : carritoList) {
+                        if (carrito.getArticulo().getId() == idInt) {
+                            carrito.setCantidad(carrito.getCantidad() + 1);
+                            cantidad = carrito.getCantidad();
+                            break;
+                        }
                     }
-                }
-                for (Cookie cookie : cookies) {
-                    if (cookie.getName().equals("carrito")) {
-                        cookie.setValue(utils.codificarCookie(utils.listCarritoToCookie(carritoList)));
-                        cookie.setMaxAge(60 * 60 * 24 * 365 * 2);
-                        response.addCookie(cookie);
+                    for (Cookie cookie : cookies) {
+                        if (cookie.getName().equals("carrito")) {
+                            cookie.setValue(utils.codificarCookie(utils.listCarritoToCookie(carritoList)));
+                            cookie.setMaxAge(60 * 60 * 24 * 2);
+                            response.addCookie(cookie);
+                        }
                     }
+                    session.setAttribute("carrito", carritoList);
+                    response.setContentType("application/json");
+                    out = response.getWriter();
+                    cantidadString = String.valueOf(cantidad);
+                    out.print(cantidadString);
+                    out.flush();
+                } else {
+                    id = jsonObject.getString("id");
+                    int idInt = Integer.parseInt(id);
+                    carritoList = (List<Carrito>) session.getAttribute("carrito");
+                    IPedidosDAO pedidosDAO = daof.getIPedidosDAO();
+                    ILineasPedidosDAO lineasPedidosDAO = daof.getILineasPedidoDAO();
+                    Pedido pedido = new Pedido();
+                    pedido = pedidosDAO.getPedidoPorEstado(usuario.getId(), Estado.C);
+                    List<LineaPedido> lineasPedido = null;
+                    for (Carrito carrito : carritoList) {
+                        if (carrito.getArticulo().getId() == idInt) {
+                            carrito.setCantidad(carrito.getCantidad() + 1);
+                            cantidad = carrito.getCantidad();
+                            pedido.setImporte(pedido.getImporte() + carrito.getArticulo().getPrecio());
+                            pedidosDAO.actualizarPedido(pedido);
+                            lineasPedido = lineasPedidosDAO.getLineasPedido(pedido.getIdPedido());
+                            if (lineasPedido != null) {
+                                for (LineaPedido lineaPedido : lineasPedido) {
+                                    if (lineaPedido.getArticulo().getId() == carrito.getArticulo().getId()) {
+                                        lineaPedido.setCantidad(lineaPedido.getCantidad() + 1);
+                                        lineasPedidosDAO.actualizarLineaPedido(lineaPedido);
+                                        lineasPedido.add(lineaPedido);
+                                        break;
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    response.setContentType("application/json");
+                    out = response.getWriter();
+                    JSONObject jsonDatos = new JSONObject();
+                    jsonDatos.put("cantidad", cantidad);
+                    jsonDatos.put("size", carritoList.size());
+                    String jsonDatosString = jsonDatos.toString();
+                    out.print(jsonDatosString);
+                    out.flush();
+
                 }
-                session.setAttribute("carrito", carritoList);
-                response.setContentType("application/json");
-                out = response.getWriter();
-                cantidadString = String.valueOf(cantidad);
-                out.print(cantidadString);
-                out.flush();
+
                 break;
             case "restar":
-                id = jsonObject.getString("id");
-                idInt = Integer.parseInt(id);
-                carritoList = (List<Carrito>) session.getAttribute("carrito");
+                if (usuario == null) {
+                    id = jsonObject.getString("id");
+                    int idInt = Integer.parseInt(id);
+                    carritoList = (List<Carrito>) session.getAttribute("carrito");
 
-                for (Carrito carrito : carritoList) {
-                    if (carrito.getArticulo().getId() == idInt) {
-                        carrito.setCantidad(carrito.getCantidad() - 1);
-                        if (carrito.getCantidad() == 0) {
-                            carritoList.remove(carrito);
-                            if (carritoList.isEmpty()) {
-                                for (Cookie cookie : cookies) {
-                                    if (cookie.getName().equals("carrito")) {
-                                        cookie.setMaxAge(0);
-                                        response.addCookie(cookie);
+                    for (Carrito carrito : carritoList) {
+                        if (carrito.getArticulo().getId() == idInt) {
+                            carrito.setCantidad(carrito.getCantidad() - 1);
+                            if (carrito.getCantidad() == 0) {
+                                carritoList.remove(carrito);
+                                if (carritoList.isEmpty()) {
+                                    for (Cookie cookie : cookies) {
+                                        if (cookie.getName().equals("carrito")) {
+                                            cookie.setMaxAge(0);
+                                            response.addCookie(cookie);
+                                        }
                                     }
+                                    cantidad = 0;
+                                    session.removeAttribute("carrito");
+                                    break;
+                                } else {
+                                    for (Cookie cookie : cookies) {
+                                        if (cookie.getName().equals("carrito")) {
+                                            cookie.setValue(
+                                                    utils.codificarCookie(utils.listCarritoToCookie(carritoList)));
+                                            cookie.setMaxAge(60 * 60 * 24 * 365 * 2);
+                                            response.addCookie(cookie);
+                                        }
+                                    }
+                                    cantidad = carrito.getCantidad();
+                                    session.setAttribute("carrito", carritoList);
+                                    break;
                                 }
-                                cantidad = 0;
-                                session.removeAttribute("carrito");
-                                break;
+                            }
+                            cantidad = carrito.getCantidad();
+                            break;
+                        }
+                    }
+                    response.setContentType("application/json");
+                    out = response.getWriter();
+                    JSONObject jsonDatos = new JSONObject();
+                    jsonDatos.put("cantidad", cantidad);
+                    jsonDatos.put("size", carritoList.size());
+                    String jsonDatosString = jsonDatos.toString();
+                    out.print(jsonDatosString);
+                    out.flush();
+                } else {
+                    id = jsonObject.getString("id");
+                    int idInt = Integer.parseInt(id);
+                    carritoList = (List<Carrito>) session.getAttribute("carrito");
+                    IPedidosDAO pedidosDAO = daof.getIPedidosDAO();
+                    List<LineaPedido> lineasPedido = null;
+                    ILineasPedidosDAO lineasPedidosDAO = daof.getILineasPedidoDAO();
+                    Pedido pedido = pedidosDAO.getPedidoPorEstado(usuario.getId(), Estado.C);
+                    lineasPedido = lineasPedidosDAO.getLineasPedido(pedido.getIdPedido());
+                    for (Carrito carrito : carritoList) {
+                        if (carrito.getArticulo().getId() == idInt) {
+                            carrito.setCantidad(carrito.getCantidad() - 1);
+                            if (carrito.getCantidad() == 0) {
+                                carritoList.remove(carrito);
+                                if (carritoList.isEmpty()) {
+                                    if (lineasPedido != null) {
+                                        for (LineaPedido lineaPedido : lineasPedido) {
+                                            lineasPedidosDAO.deleteLineasPedido(lineaPedido.getPedido().getIdPedido());
+                                            lineasPedido.remove(lineaPedido);
+                                        }
+                                    }
+                                    pedido.setLineasPedido(lineasPedido);
+                                    pedidosDAO.deletePedido(pedido.getIdPedido());
+                                    session.removeAttribute("carrito");
+                                    break;
+                                } else {
+                                    if (lineasPedido != null) {
+                                        for (LineaPedido lineaPedido : lineasPedido) {
+                                            if (lineaPedido.getArticulo().getId() == carrito.getArticulo().getId()) {
+                                                lineasPedidosDAO.deleteLineaPedido(lineaPedido);
+                                                lineasPedido.remove(lineaPedido);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    pedido.setLineasPedido(lineasPedido);
+                                    pedido.setImporte(pedido.getImporte() - carrito.getArticulo().getPrecio());
+                                    pedidosDAO.actualizarPedido(pedido);
+                                    break;
+                                }
                             } else {
-                                for (Cookie cookie : cookies) {
-                                    if (cookie.getName().equals("carrito")) {
-                                        cookie.setValue(utils.codificarCookie(utils.listCarritoToCookie(carritoList)));
-                                        cookie.setMaxAge(60 * 60 * 24 * 365 * 2);
-                                        response.addCookie(cookie);
+                                cantidad = carrito.getCantidad();
+                                pedido.setImporte(pedido.getImporte() - carrito.getArticulo().getPrecio());
+                                if (lineasPedido != null) {
+                                    for (LineaPedido lineaPedido : lineasPedido) {
+                                        if (lineaPedido.getArticulo().getId() == carrito.getArticulo().getId()) {
+                                            lineaPedido.setCantidad(lineaPedido.getCantidad() - 1);
+                                            lineasPedidosDAO.actualizarLineaPedido(lineaPedido);
+                                            break;
+                                        }
                                     }
                                 }
-                                cantidad = carrito.getCantidad();
-                                session.setAttribute("carrito", carritoList);
+                                pedido.setLineasPedido(lineasPedido);
+                                pedidosDAO.actualizarPedido(pedido);
                                 break;
                             }
                         }
-                        cantidad = carrito.getCantidad();
-                        break;
                     }
+                    response.setContentType("application/json");
+                    out = response.getWriter();
+                    JSONObject jsonDatos = new JSONObject();
+                    jsonDatos.put("cantidad", cantidad);
+                    jsonDatos.put("size", carritoList.size());
+                    String jsonDatosString = jsonDatos.toString();
+                    out.print(jsonDatosString);
+                    out.flush();
                 }
-                response.setContentType("application/json");
-                out = response.getWriter();
-                cantidadString = String.valueOf(cantidad);
-                out.print(cantidadString);
-                out.flush();
+
                 break;
-            case "validarEmail":
+            case "validateEmail":
                 String email = jsonObject.getString("email");
                 boolean emailExists = verificarExistenciaEmail(email);
                 response.setContentType("application/json");
@@ -159,19 +283,10 @@ public class AjaxController extends HttpServlet {
                 out.flush();
                 break;
             case "filtrarProductosCategoria":
-                sb = new StringBuilder();
-                try {
-                    while ((line = request.getReader().readLine()) != null) {
-                        sb.append(line);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
                 String context = request.getContextPath();
                 String categoria = jsonObject.getString("categoria");
-                int idCategoria = Integer.parseInt(categoria);
-                ICategoriasDAO categoriaDAO =  daof.getICategoriasDAO();
+                byte idCategoria = (byte) Integer.parseInt(categoria);
+                ICategoriasDAO categoriaDAO = daof.getICategoriasDAO();
                 IArticulosDAO articulosDAO = daof.getIArticulosDAO();
                 Categoria categoriaObj = categoriaDAO.getCategoria(idCategoria);
                 request.getSession().setAttribute("categoria", categoriaObj);
@@ -186,19 +301,11 @@ public class AjaxController extends HttpServlet {
                 out.print(jsonResponse.toString());
                 out.flush();
                 break;
+            case "filtrarProductosSearch":
             case "filtrarProductosID":
-                sb = new StringBuilder();
-                try {
-                    while ((line = request.getReader().readLine()) != null) {
-                        sb.append(line);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
                 context = request.getContextPath();
                 String idArticulo = jsonObject.getString("idProducto");
-                int idArticuloInt = Integer.parseInt(idArticulo);
+                byte idArticuloInt = (byte) Integer.parseInt(idArticulo);
                 articulosDAO = daof.getIArticulosDAO();
                 Articulo articulo = articulosDAO.getArticulo(idArticuloInt);
                 request.getSession().setAttribute("articulo", articulo);
@@ -211,11 +318,48 @@ public class AjaxController extends HttpServlet {
                 out.print(jsonResponse.toString());
                 out.flush();
                 break;
+            case "filtrarProductosMarca":
+                context = request.getContextPath();
+                String marca = jsonObject.getString("marca");
+                articulosDAO = daof.getIArticulosDAO();
+                List<Articulo> productosMarca = articulosDAO.getArticulosPorMarca(marca);
+                request.getSession().setAttribute("productos", productosMarca);
+
+                jsonResponse = new JSONObject();
+                jsonResponse.put("redirectUrl", context + "/JSP/productos.jsp");
+
+                response.setContentType("application/json");
+                out = response.getWriter();
+                out.print(jsonResponse.toString());
+                out.flush();
+                break;
+            case "filtrarProductosPrecio":
+                context = request.getContextPath();
+                String precio = jsonObject.getString("precio");
+                int precioInt = Integer.parseInt(precio);
+                articulosDAO = daof.getIArticulosDAO();
+                List<Articulo> productosPrecio = articulosDAO.getArticulosPrecioMenorA(precioInt);
+                request.getSession().setAttribute("productos", productosPrecio);
+
+                jsonResponse = new JSONObject();
+                jsonResponse.put("redirectUrl", context + "/JSP/productos.jsp");
+
+                response.setContentType("application/json");
+                out = response.getWriter();
+                out.print(jsonResponse.toString());
+                out.flush();
+                break;
             default:
                 break;
         }
     }
 
+    /**
+     * Verifica la existencia de un correo electrónico en la base de datos.
+     *
+     * @param email correo electrónico a verificar
+     * @return true si el correo electrónico existe, false de lo contrario
+     */
     private boolean verificarExistenciaEmail(String email) {
         DAOFactory daof = DAOFactory.getDAOFactory();
         IUsuariosDAO usuarioDao = daof.getIUsuarioDAO();
@@ -224,5 +368,15 @@ public class AjaxController extends HttpServlet {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Devuelve una breve descripción del servlet.
+     *
+     * @return una cadena que contiene la descripción del servlet
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
     }
 }

@@ -26,7 +26,7 @@
         <section class="min-vh-100  w-100">
             <div class="container mt-3 w-75 vh-100 flex-column">
                 <h5 class="text-center text-white">Editar Perfil</h5>
-                <form action="${contexto}/EditarPerfil" method="post" class="w-100" enctype="multipart/form-data">
+                <form action="${contexto}/EditarPerfil" method="post" class="w-100" enctype="multipart/form-data" autocomplete="off">
                     <div class="accordion shadow" id="accordionExample">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
@@ -211,35 +211,6 @@
                             class="btn btn-primary btn-lg mx-1">Aceptar</button>
                         <button type="submit" name="button" value="cancelar"
                             class="btn btn-primary btn-lg">Cancelar</button>
-                        <button type="button" class="btn btn-danger btn-lg mx-1" data-mdb-modal-init
-                            data-mdb-target="#alertaBorrarModal">Borrar Cuenta</button>
-                        <div class="modal top fade" id="alertaBorrarModal" tabindex="-1"
-                            aria-labelledby="alertaBorrarModalLabel" aria-hidden="true" data-mdb-backdrop="true"
-                            data-mdb-keyboard="true">
-                            <div class="modal-dialog   modal-dialog-centered">
-                                <div class="modal-content" style="background: #d0daffd8; color:black;">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="alertaBorrarModalLabel">Borrar Cuenta</h5>
-                                        <button type="button" class="btn-close" data-mdb-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <p class="text-center">¿Estas seguro de que quieres borrar tu cuenta?</p>
-                                            <p class="text-center text-danger">Esta acci&oacute;n no se puede deshacer.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
-                                            Cancelar
-                                        </button>
-                                        <button type="submit" name="button" value="borrarCuenta"
-                                            class="btn btn-dark">Aceptar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                 </form>
             </div>
         </section>

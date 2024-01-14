@@ -33,14 +33,15 @@
                 </div>
             </div>
         </div>
-        <table class="table align-middle mb-0 my-5" style="background-color: white;">
+        <table class="table align-middle mb-0 my-5" style="background-color: #fff !important;">
            
-            <thead class="">
+            <thead class="bg-white text-bg-white">
                 <tr>
                     <th>Nombre</th>
                     <th>Marca</th>
                     <th>Precio</th>
                     <th>Cantidad</th>
+                    <th>Estado</th>
                     <th>Precio Total (Sin IVA)</th>
                 </tr>
             </thead>
@@ -61,33 +62,37 @@
                         <p class="fw-normal mb-1">${carrito.articulo.marca}</p>
                     </td> 
                     <td class="text-black">
-                        <p class="fw-normal mb-1 precioArticulo">${carrito.articulo.precio}</p>
+                        <p class="fw-normal mb-1 precioArticulo">${carrito.articulo.precio}€</p>
                     </td>
                     <td class="text-black">
                         <p class="fw-normal mb-1 cantidad">${carrito.cantidad}</p>
                     </td>
                     <td class="text-black">
-                        <p class="fw-normal mb-1 precioTotal">${carrito.articulo.precio * carrito.cantidad}</p>
+                        <span class="badge badge-warning">Pendiente</span>
+                    </td>
+                    <td class="text-black">
+                        <p class="fw-normal mb-1 precioTotal">${carrito.articulo.precio * carrito.cantidad}€</p>
                     </td>
                 </tr>
                 </c:forEach>
                 <tr>
-                    <td class="text-black">
+                    <td class="text-white">
                         <p  class="fw-bold mb-1">Total (Con IVA)</p>
                     </td>
                     <td>
                         <p class="fw-normal mb-1"></p>
                     </td>
-                    <td class="text-black">
+                    <td class="text-white">
                     </td>
-                    <td class="text-black">
+                    <td class="text-white">
                     </td>
-                    <td class="text-black">
+                    <td class="text-white">
                         <p id="precioTotalPedido" class="fw-normal mb-1">120.00</p>
                     </td>
                 </tr>
             </tbody>
         </table>
+        
         <form action="${contexto}/FinalizarCompraController" method="post" class="mt-2">
             <button type="submit" class="btn btn-dark btn-rounded btn-sm fw-bold"
                 data-mdb-ripple-color="dark">

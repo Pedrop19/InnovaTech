@@ -34,7 +34,7 @@ DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_spanish_ci;
 
 /* INSERCION DE UN USUARIO */
-INSERT INTO `innovatech`.`usuarios` (`idusuario`, `email`, `password`, `nombre`, `apellidos`, `nif`, `telefono`, `direccion`, `codigoPostal`, `localidad`, `provincia`, `ultimoAcceso`, `avatar`) VALUES ('0', 'admin@admin.com', '789123', 'admin', 'admin', '789123', '789123', 'admin', '06800', 'merida', 'badajoz', '2023-11-12', 'default.jpg');
+INSERT INTO `innovatech`.`usuarios` (`idusuario`, `email`, `password`, `nombre`, `apellidos`, `nif`, `telefono`, `direccion`, `codigoPostal`, `localidad`, `provincia`, `ultimoAcceso`, `avatar`, `verificado`) VALUES ('0', 'admin@admin.com', '0d06fd8cb26eb57f1a690f493663cc55', 'admin', 'admin', '789123', '789123', 'admin', '06800', 'merida', 'badajoz', '2023-11-12', 'default.jpg', '1');
 
 
 
@@ -99,7 +99,6 @@ CREATE TABLE `innovatech`.`lineaspedidos` (
   `idPedido` SMALLINT NOT NULL,
   `idProducto` SMALLINT NOT NULL,
   `cantidad` TINYINT UNSIGNED NULL,
-  `orden` TINYINT UNSIGNED NULL,
   PRIMARY KEY (`idLinea`),
   INDEX `idPedido_idx` (`idPedido` ASC) VISIBLE,
   INDEX `idProducto_idx` (`idProducto` ASC) VISIBLE,

@@ -14,6 +14,7 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="${css}">
         <link rel="icon" href="${icono}">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
         <script src="${contexto}/JS/Busqueda.js" defer></script>
         <script src="${contexto}/JS/Ajax.js" defer></script>
         <script src="${contexto}/JS/SumarRestar.js" defer></script>
@@ -26,7 +27,7 @@
         <section class="min-vh-100  w-100">
             <div class="container mt-3 w-75 vh-100 flex-column">
                 <h5 class="text-center text-white">Registro</h5>
-                <form action="${contexto}/RegistrarController" method="post" class="w-100" enctype="multipart/form-data">
+                <form action="${contexto}/RegistrarController" method="post" class="w-100" enctype="multipart/form-data" autocomplete="off">
                     <div class="accordion shadow" id="accordionExample">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
@@ -177,7 +178,7 @@
                     
                     <p class="text-center text-danger mt-3" id="error"></p>
                     <div class="px-5 justify-content-center align-items-center d-flex mt-3">
-                        <button type="submit" name="button" id="btn-registrar" value="registrar"
+                        <button type="submit" name="button" id="btn-registrar" value="registrar" onclick="carga()"
                             class="btn btn-primary btn-lg mx-1">Aceptar</button>
                         <button type="submit" name="button" value="cancelar"
                             class="btn btn-primary btn-lg">Cancelar</button>
@@ -195,6 +196,31 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
             integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
             crossorigin="anonymous"></script>
+        <script>
+            function carga(){
+            let timerInterval;
+            Swal.fire({
+            title: "Registrando Datos",
+            timer: 20000,
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading();
+                const timer = Swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                }, 100);
+            },
+            willClose: () => {
+                clearInterval(timerInterval);
+            }
+            }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.timer) {
+                console.log("I was closed by the timer");
+            }
+            });
+            }
+            
+            
+</script>
     </body>
 
 </html>

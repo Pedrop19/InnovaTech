@@ -23,6 +23,28 @@
 </head>
 
 <body class="seccion-central">
+    <section>
+        <div class="p-5 text-center bg-image" style="
+    background-image: url('${contexto}/IMG/bg.svg');
+    height: 850px;
+  ">
+            <div class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
+                <div class="d-flex justify-content-center align-items-center h-100">
+                    <div class="text-white">
+                        <div class="card">
+                            <div class="card-body">
+                              <h5 class="card-title">Verificaci&oacute;n de Email</h5>
+                              <p class="card-text">Gracias por verificar tu email.<p>
+                              <p class="card-text">Ya puedes volver a la tienda e iniciar sesi&oacute;n</p>
+                              <p class="card-text text-muted">Si no puedes iniciar sesi&oacute;n o ha habido alg&uacute;n problema al verificarte,<br>por favor, ponte en contacto con nosotros</p>
+                              <a href="${contexto}/carga.jsp" class="btn btn-success text-center">Inicio</a>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <c:if test="${error != null}">
         <script>
             Swal.fire({
@@ -41,6 +63,5 @@
                 });
         </script>
     </c:if>
-    <p class="h3 text-center">Ya puedes volver a la tienda e iniciar sesi&oacute;n</p>
-    <a href="${contexto}/carga.jsp" class="btn btn-success text-center">Inicio</a>
+    <jsp:include page="/INC/footer.jsp"/>
 </body>

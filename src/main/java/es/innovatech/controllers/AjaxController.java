@@ -86,7 +86,6 @@ public class AjaxController extends HttpServlet {
         Cookie[] cookies = request.getCookies();
         Utils utils = new Utils();
         int cantidad = 0;
-        String cantidadString = "";
         PrintWriter out = response.getWriter();
         DAOFactory daof = DAOFactory.getDAOFactory();
         Usuario usuario = (Usuario) session.getAttribute("usuario");
@@ -95,27 +94,31 @@ public class AjaxController extends HttpServlet {
             case "sumar":
                 if (usuario == null) {
                     id = jsonObject.getString("id");
-                    carritoList = (List<Carrito>) session.getAttribute("carrito");
                     int idInt = Integer.parseInt(id);
+                    carritoList = (List<Carrito>) session.getAttribute("carrito");
                     for (Carrito carrito : carritoList) {
                         if (carrito.getArticulo().getId() == idInt) {
                             carrito.setCantidad(carrito.getCantidad() + 1);
+                            for (Cookie cookie : cookies) {
+                                if (cookie.getName().equals("carrito")) {
+                                    cookie.setValue(
+                                            utils.codificarCookie(utils.listCarritoToCookie(carritoList)));
+                                    cookie.setMaxAge(60 * 60 * 24 * 365 * 2);
+                                    response.addCookie(cookie);
+                                }
+                            }
                             cantidad = carrito.getCantidad();
+                            session.setAttribute("carrito", carritoList);
                             break;
                         }
                     }
-                    for (Cookie cookie : cookies) {
-                        if (cookie.getName().equals("carrito")) {
-                            cookie.setValue(utils.codificarCookie(utils.listCarritoToCookie(carritoList)));
-                            cookie.setMaxAge(60 * 60 * 24 * 2);
-                            response.addCookie(cookie);
-                        }
-                    }
-                    session.setAttribute("carrito", carritoList);
                     response.setContentType("application/json");
                     out = response.getWriter();
-                    cantidadString = String.valueOf(cantidad);
-                    out.print(cantidadString);
+                    JSONObject jsonDatos = new JSONObject();
+                    jsonDatos.put("cantidad", cantidad);
+                    jsonDatos.put("size", carritoList.size());
+                    String jsonDatosString = jsonDatos.toString();
+                    out.print(jsonDatosString);
                     out.flush();
                 } else {
                     id = jsonObject.getString("id");
@@ -154,7 +157,6 @@ public class AjaxController extends HttpServlet {
                     String jsonDatosString = jsonDatos.toString();
                     out.print(jsonDatosString);
                     out.flush();
-
                 }
 
                 break;

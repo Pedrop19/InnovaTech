@@ -1,6 +1,6 @@
 <div class="nac w-100 d-flex  justify-content-center bg-transparent">
-    <nav class="navbar navbar-expand-lg mt-4 d-flex flex-column  navbar-light rounded-6 "
-        style="background: #d0daffa0;">
+    <nav class="navbar navbar-expand-lg mt-4 d-flex flex-column  navbar-light"
+        style="background: #d0daffa0; border-radius: 10px 10px 0px 0px;">
 
         <!-- Primera linea -->
         <div class="container-fluid ">
@@ -65,7 +65,7 @@
 
                     </a>
                 </div>
-                <form action="${contexto}/FrontController" method="post">
+                <form action="${contexto}/FrontController" method="post" autocomplete="off">
                     <div class="buttons d-flex col-3 m-0 p-0">
                         <c:choose>
                             <c:when test="${sessionScope.usuario != null}">
@@ -135,18 +135,18 @@
                                                     <button type="button" class="btn-close" data-mdb-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
-                                                <div class="modal-body bg-dark rounded-2">
+                                                <div class="modal-body rounded-2">
                                                     <div class="mb-3">
                                                         <div data-mdb-input-init class="form-outline mb-4">
                                                             <input type="text" class="input-box form-control"
-                                                                name="email" />
-                                                            <label class="form-label text-white" for="form3Example3">Email</label>
+                                                                name="email" id="email-modal" autocomplete="off" />
+                                                            <label class="form-label text-white" for="email-modal">Email</label>
                                                         </div>
                                                         <div data-mdb-input-init class="form-outline mb-4">
                                                             <input type="password" class="input-box form-control"
-                                                                name="password" />
+                                                                name="password" id="password-modal" autocomplete="off"/>
                                                             <label class="form-label text-white"
-                                                                for="form3Example3">Contrase&ntilde;a</label>
+                                                                for="password-modal">Contrase&ntilde;a</label>
                                                         </div>
                                                     </div>
                                                     <p class="text-center text-white">&iquest;No tienes cuenta? <button type="button"
@@ -171,14 +171,14 @@
                         </c:choose>
                     </div>
                 </form>
-                <i class="fas fa-shopping-cart fs-4 mx-2" data-mdb-modal-init data-mdb-target="#exampleModal"><span
+                <i class="fas fa-shopping-cart fs-4 mx-2" data-mdb-modal-init data-mdb-target="#carritoModal"><span
                         class="badge rounded-pill badge-notification bg-danger" id="carritoSize">${sessionScope.carrito.size()}</span></i>
-                <div class="modal right fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                <div class="modal right fade" id="carritoModal" tabindex="-1" aria-labelledby="carritoModalLabel"
                     aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
                     <div class="modal-dialog modal-carrito w-100">
                         <div class="modal-content ">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Carrito</h5>
+                                <h5 class="modal-title" id="carritoModalLabel" style="color: #b27878 !important;">Carrito</h5>
                                 <button type="button" class="btn-close" data-mdb-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
@@ -186,7 +186,7 @@
                                 <div class="container-fluid">
                                     <div class="row">
                                         <div class="col-12">
-                                            <table class="table table-element table-hover bg-info">
+                                            <table class="table table-element table-hover bg-info shadow">
                                                 <thead>
                                                     <tr>
                                                         <th class="text-black" scope="col">Imagen</th>
@@ -209,8 +209,7 @@
                                                                         <td class="text-black">${carrito.articulo.nombre}</td>
                                                                         <td><button type="button"  class="fas fa-minus-circle mx-2 rounded-circle p-0 bg-info btn-menos"></button><span class="text-black cantidad">${carrito.cantidad}</span><button type="button"
                                                                                 class="fas fa-plus-circle mx-2 rounded-circle p-0 bg-info btn-mas"></button></td>
-                                                                        <fmt:formatNumber value="${carrito.articulo.precio * carrito.cantidad}" pattern="#,##0.00" var="precioFormateado" />
-                                                                        <td class="text-black precioTotal">${precioFormateado}</td>
+                                                                        <td class="text-black precioTotal">${carrito.articulo.precio * carrito.cantidad}</td>
                                                                         <td><button type="submit" value="eliminar" class="btn btn-danger"
                                                                                 name="button" value="eliminarCarrito"
                                                                                 >Eliminar</button>
@@ -235,7 +234,7 @@
                                                 Cerrar
                                             </button>
                                             <form action="${contexto}/CarritoController" method="post">
-                                                <button type="submit" value="vaciar" class="btn btn-dark">Vaciar Carrito</button>
+                                                <button type="submit" name="button" value="vaciar" class="btn btn-dark">Vaciar Carrito</button>
                                                 <button type="submit" id="finalizar" name="button" value="finalizar"
                                                     class="btn btn-primary">Finalizar
                                                     Compra</button>
@@ -249,6 +248,17 @@
                 </div>
             </div>
         </div>
+        <c:if test="${sessionScope.usuario != null}">
+            <c:choose>
+                <c:when test="${sessionScope.usuario.isVerificado() == false}">
+                    <div class="container-fluid text-center" style="background-color: #F5C42F; width: 90% !important; border-radius: 0px 0px 10px 10px !important;">
+                           <p><i class="fa-solid fa-warning"></i><strong>Verifica tu cuenta!</strong> Te hemos enviado un correo para verificar tu cuenta.</p>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                </c:otherwise>
+            </c:choose>
+        </c:if>
                 <c:if test="${error != null}">
                     <script>
                         Swal.fire({

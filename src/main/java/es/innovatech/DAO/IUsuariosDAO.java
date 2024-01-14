@@ -46,13 +46,6 @@ public interface IUsuariosDAO {
     public Usuario getUsuario(String password, String email);
 
     /**
-     * Elimina un usuario de la base de datos por su dirección de correo electrónico.
-     * 
-     * @param email Dirección de correo electrónico del usuario a eliminar
-     */
-    public void delete(String email);
-
-    /**
      * Obtiene un usuario por su ID.
      * 
      * @param idUsuario ID del usuario

@@ -34,11 +34,12 @@
                 </div>
             </div>
         </div>
-        <table class="table align-middle mb-0 my-5" style="background-color: #d0daffa0;">
+        <table class="table rounded-4 bg-secondary align-middle mb-0 my-5">
             <thead class="text-black">
                 <tr>
-                    <th>IdPedido</th>
+                    <th>N&uacute;mero de Pedido</th>
                     <th>Fecha</th>
+                    <th>Estado</th>
                     <th>Importe (Sin Iva)</th>
                     <th>Iva</th>
                     <th>Precio Total (Con IVA)</th>
@@ -63,13 +64,16 @@
                                         <p class="fw-normal mb-1"><fmt:formatDate value="${fecha}" pattern="dd/MM/yyyy" /></p>
                                     </td>
                                     <td class="text-black">
-                                        <p class="fw-normal mb-1">${pedido.importe}</p>
+                                        <span class="badge bg-success text-black rounded-pill badge-success">Finalizado</span>
                                     </td>
                                     <td class="text-black">
-                                        <p class="fw-normal mb-1">${pedido.iva}</p>
+                                        <p class="fw-normal mb-1">${pedido.importe}€</p>
                                     </td>
                                     <td class="text-black">
-                                        <p class="fw-normal mb-1">${pedido.importe + pedido.iva}</p>
+                                        <p class="fw-normal mb-1">${pedido.iva}€</p>
+                                    </td>
+                                    <td class="text-black">
+                                        <p class="fw-normal mb-1">${pedido.importe + pedido.iva}€</p>
                                     </td>
                                 </tr>
                     </c:forEach>
@@ -77,7 +81,7 @@
             </c:choose>
             </tbody>
         </table>
-        <a href="${contexto}/index.jsp" class="btn btn-success">Volver</a>
+        <a href="${contexto}/index.jsp" class="btn btn-success mt-2">Volver</a>
     </section>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"></script>
     <jsp:directive.include file="/INC/footer.jsp"/>

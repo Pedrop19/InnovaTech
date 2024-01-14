@@ -34,7 +34,8 @@ for (let i = 0; i < btnMasElement.length; i++) {
                         window.location.reload();
                     }
                 }
-                let precioTotal = parseFloat(parseInt(data) * parseFloat(precioElement[i].value)).toFixed(2);
+                let precioTotal = parseFloat(parseInt(data.cantidad) * parseFloat(precioElement[i].value)).toFixed(2);
+                console.log(precioElement[i].value)
                 precioTotalElement[i].innerHTML = precioTotal;
             });
 });
@@ -63,7 +64,8 @@ for (let i = 0; i < btnMenosElement.length; i++) {
                         window.location.reload();
                     }
                 }
-                let precioTotal = parseFloat(parseInt(data) * parseFloat(precioElement[i].value)).toFixed(2);
+                let precioTotal = parseFloat(parseInt(data.cantidad) * parseFloat(precioElement[i].value)).toFixed(2);
+                console.log(precioTotal)
                 precioTotalElement[i].innerHTML = precioTotal;
             });
 });
@@ -74,7 +76,7 @@ if(precioTotalPedidoconIva != null){
     precioTotalElement.forEach(element => {
         let precioTotalPedido = 0;
         precioTotalPedido = ((parseFloat(precioTotalPedido) + parseFloat(element.innerHTML)) * 0.18 + parseFloat(element.innerHTML)).toFixed(2);
-        precioTotalPedidoconIva.innerHTML = precioTotalPedido;
+        precioTotalPedidoconIva.innerHTML = precioTotalPedido + "€";
     });
 }
 

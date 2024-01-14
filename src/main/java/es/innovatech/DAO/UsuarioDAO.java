@@ -143,36 +143,6 @@
          * {@inheritDoc}
          */
         @Override
-        public void delete(String email) {
-            Connection connection = null;
-            String query = "DELETE FROM usuarios WHERE email = ?";
-
-            try {
-                connection = ConnectionFactory.getConnection();
-                connection.setAutoCommit(false);
-                PreparedStatement ptmt = connection.prepareStatement(query);
-                ptmt.setString(1, email);
-                ptmt.executeUpdate();
-                connection.commit();
-                this.closeConnection(); 
-            } catch (SQLException e) {
-                e.printStackTrace();
-                if (connection != null) {
-                    try {
-                        connection.rollback();
-                    } catch (SQLException rollbackException) {
-                        rollbackException.printStackTrace();
-                    }
-                }
-            } finally {
-                this.closeConnection();
-            }
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
         public Usuario getUsuarioPorId(short id){
             Connection connection = null;
             Usuario usuario = new Usuario();

@@ -69,14 +69,6 @@ public class EditarPerfil extends HttpServlet {
         DAOFactory daof = DAOFactory.getDAOFactory();
 
         switch (button) {
-            case "borrarCuenta":
-                usuarioDao = daof.getIUsuarioDAO();
-                String email = request.getParameter("email");
-                usuarioDao.delete(email);
-                HttpSession session = request.getSession();
-                session.removeAttribute("usuario");
-                url = "index.jsp";
-                break;
             case "aceptar":
                 usuarioDao = daof.getIUsuarioDAO();
                 Part filePart = request.getPart("avatar");
@@ -103,8 +95,8 @@ public class EditarPerfil extends HttpServlet {
                     Enumeration<String> campos = request.getParameterNames();
                     while (campos.hasMoreElements()) {
                         String campo = campos.nextElement();
-                        if (!campo.equals("password")) {
-                            if (request.getParameter(campo).isEmpty() || request.getParameter(campo) == "") {
+                        if (!campo.equals("password") && !campo.equals("password2")) {
+                            if (request.getParameter(campo).isEmpty() || request.getParameter(campo) == "" ) {
                                 error = "El campo " + campo + " no puede estar vacío";
                                 request.setAttribute("error", error);
                                 url = "JSP/cuenta.jsp";

@@ -9,9 +9,6 @@
     color: black !important;
 }
 
-.table-element th, td, tr{
-    background-color: #fff !important;
-}
 
 .modal-carrito{
     right: 0 !important;
@@ -54,7 +51,7 @@
 }
 
 .modal-carrito .modal-content{
-    background: #8f3b3bb0;
+    background: #575555ee;
 }
 
 @keyframes left {
@@ -90,6 +87,10 @@
     color: #fff !important;
 }
 
+.input-box:focus{
+    box-shadow: 0 0 0 0.2rem rgba(0, 255, 0, 0.25) !important;
+    border-bottom: 1px solid #40ff00 !important;
+}
 
 
 .cartas{
@@ -146,3 +147,28 @@
     flex: 0.3 !important;
 }
 
+#email-modal, #password-modal{
+    color: black !important;
+}
+
+#email-modal:-webkit-autofill, #email-modal:-webkit-autofill:focus, #email-modal:-webkit-autofill:hover, #email-modal:-webkit-autofill:active, #password-modal:-webkit-autofill, #password-modal:-webkit-autofill:focus, #password-modal:-webkit-autofill:hover, #password-modal:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px #152140be inset !important;
+    -webkit-text-fill-color: #fff !important;
+}
+
+#email-modal::placeholder, #password-modal::placeholder{
+    color: black !important;
+}
+
+#email-modal:focus, #password-modal:focus{
+    box-shadow: 0 0 0 0.2rem rgba(0, 255, 0, 0.25) !important;
+    border-bottom: 1px solid #40ff00 !important;
+}
+
+#email-modal:focus::placeholder, #password-modal:focus::placeholder{
+    color: #fff !important;
+}
+
+#email-modal:-webkit-autofill:focus::placeholder, #password-modal:-webkit-autofill:focus::placeholder{
+    color: black !important;
+}

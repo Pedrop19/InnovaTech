@@ -139,7 +139,6 @@ public class RegistrarController extends HttpServlet {
 
                     List<Carrito> carrito = (List<Carrito>) request.getSession().getAttribute("carrito");
                     IArticulosDAO articulosDao = daof.getIArticulosDAO();
-                    Utils util = new Utils();
                     if (carrito != null) {
                         for (Carrito item : carrito) {
                             importe += item.getArticulo().getPrecio() * item.getCantidad();
@@ -148,7 +147,7 @@ public class RegistrarController extends HttpServlet {
                             cantidades.add(cantidad);
                             articulos.add(articulosDao.getArticulo(idProducto));
                         }
-
+                        usuario.setAvatar(nombreFichero.toString());;
                         usuarioDao.add(usuario);
                         IPedidosDAO pedidosDao = daof.getIPedidosDAO();
                         Pedido pedido = new Pedido();
@@ -186,22 +185,23 @@ public class RegistrarController extends HttpServlet {
                     nombreFichero.append(filePart.getSubmittedFileName());
                     filePath = dirImagen + nombreFichero.toString();
                     filePart.write(filePath);
-                    usuario.setAvatar(nombreFichero.toString());
+                    usuario.setAvatar(nombreFichero.toString());;
+                    usuarioDao.add(usuario);
                     exito = "Usuario registrado correctamente";
                     String link = utils.generateVerificationLink(usuario.getEmail(), request.getContextPath());
-                    String cuerpo = "Bienvenido" + usuario.getNombre() + "a la tienda online de InnovaTech. Para verificar tu cuenta, haz click en el siguiente enlace: " + link;
-                    utils.enviarConGMail(usuario.getEmail(), "Verifica tu cuenta", cuerpo);
+                    String cuerpo = "<img src='https://media.istockphoto.com/id/1308987644/es/v%C3%ADdeo/bienvenido-video-de-banner-retro-animado-superpuesto-en-blanco.jpg?s=640x640&k=20&c=8ix6OnaYqvQaXFiLok_ms9eILSM0cfdOk6NfuygPN5Y=' width=300></img><br>&#128075; Bienvenido/a <strong>" + usuario.getNombre() + "</strong> a la tienda online de InnovaTech.<br> Para verificar tu cuenta, haz click en el siguiente enlace &#128071;<br>" + link;
+                    utils.enviarConGMail(usuario.getEmail(), "=?UTF-8?Q?=E2=9A=A1?= Verifica tu cuenta =?UTF-8?Q?=E2=9A=A1?=", cuerpo);
                     request.setAttribute("exito", exito);
                     } else {
-                        usuarioDao.add(usuario);
                         nombreFichero.append(filePart.getSubmittedFileName());
                         filePath = dirImagen + nombreFichero.toString();
                         filePart.write(filePath);
-                        usuario.setAvatar(nombreFichero.toString());
+                        usuario.setAvatar(nombreFichero.toString());;
+                        usuarioDao.add(usuario);
                         exito = "Usuario registrado correctamente";
                         String link = utils.generateVerificationLink(usuario.getEmail(), request.getContextPath());
-                        String cuerpo = "Bienvenido " + usuario.getNombre() + " a la tienda online de InnovaTech.\n Para verificar tu cuenta, haz click en el siguiente enlace: " + link;
-                        utils.enviarConGMail(usuario.getEmail(), "Verifica tu cuenta", cuerpo);
+                        String cuerpo = "<img src='https://media.istockphoto.com/id/1308987644/es/v%C3%ADdeo/bienvenido-video-de-banner-retro-animado-superpuesto-en-blanco.jpg?s=640x640&k=20&c=8ix6OnaYqvQaXFiLok_ms9eILSM0cfdOk6NfuygPN5Y=' width=300></img><br>&#128075; Bienvenido/a <strong>" + usuario.getNombre() + "</strong> a la tienda online de InnovaTech.<br> Para verificar tu cuenta, haz click en el siguiente enlace &#128071;<br>" + link;
+                        utils.enviarConGMail(usuario.getEmail(), "=?UTF-8?Q?=E2=9A=A1?= Verifica tu cuenta =?UTF-8?Q?=E2=9A=A1?=", cuerpo);
                         request.setAttribute("exito", exito);
                     }
                     url = "index.jsp";

@@ -14,8 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-
+import javax.mail.internet.MimeMultipart;
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -180,16 +183,22 @@ public class Utils {
     
         try {
             message.setFrom(new InternetAddress(remitente));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));   //Se podrían añadir varios de la misma manera
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario)); 
             message.setSubject(asunto);
-            message.setText(cuerpo);
+            BodyPart messageBodyPart = new MimeBodyPart();
+            messageBodyPart.setContent(cuerpo, "text/html");
+            MimeMultipart multipart = new MimeMultipart();
+            multipart.addBodyPart(messageBodyPart);
+            message.setContent(multipart);
+            
+            
             Transport transport = session.getTransport("smtp");
             transport.connect("smtp.gmail.com", remitente, claveemail);
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
         }
         catch (MessagingException me) {
-            me.printStackTrace();   //Si se produce un error
+            me.printStackTrace();   
         }
       }
 }

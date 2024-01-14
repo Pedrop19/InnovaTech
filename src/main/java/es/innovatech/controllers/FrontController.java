@@ -134,6 +134,7 @@ public class FrontController extends HttpServlet {
             case "cerrarSesion":
                 session = request.getSession();
                 session.removeAttribute("usuario");
+                session.removeAttribute("carrito");
                 url = "index.jsp";
                 break;
             case "vercuenta":

@@ -1,5 +1,6 @@
 Mejorar:
 
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/InnovaTech">
     <Resource
@@ -27,3 +28,4 @@ Mejorar:
     driverClassName="com.mysql.jdbc.Driver"
     url="jdbc:mysql://viaduct.proxy.rlwy.net:18413/railway" />
 </Context>
+```
